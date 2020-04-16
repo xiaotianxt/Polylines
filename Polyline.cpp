@@ -2,7 +2,7 @@
 
 PolyLine::PolyLine(vector<Point> _points, string _mode) : points(_points), mode(_mode) // 初始化
 {
-    findlenth();
+    findlenth(); // 计算长度
 }
 
 void PolyLine::findlenth()
@@ -11,7 +11,7 @@ void PolyLine::findlenth()
     lenth = 0.0;
     for (size_t i = 1; i < points.size(); i++)
     {
-        lenths.push_back(FindLenth(points[i - 1], points[i]));
+        lenths.push_back(FindLenth(points[i - 1], points[i])); // 依次将长度保存
         lenth += lenths.back();
     }
 }

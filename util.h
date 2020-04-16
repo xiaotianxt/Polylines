@@ -17,12 +17,14 @@
 #include <math.h>
 #include <direct.h>
 #include <io.h>
+#include <windows.h>
+#include <tchar.h>
 
 using namespace std;
 
-bool equal(double a, double b);
+bool equal(double a, double b); // 判断double类型是否相等
 
-int compare(double a, double b);
+int compare(double a, double b); // double比大小
 
 /*********************************
 * 名称：		GetFiles
@@ -33,4 +35,13 @@ int compare(double a, double b);
 *********************************/
 vector<string> GetFiles(string cate_dir);
 
-vector<string> FileName(string pattern);
+/*********************************
+* 名称：		GetAllFormatFiles
+* 描述：		给定路径, 返回所有当前路径下
+			的同类型文件(不包含子文件
+* 
+* 参数：		path // 路径
+			files // 文件
+* 返回值：	
+*********************************/
+void GetAllFormatFiles(string path, vector<string>& files, string format);

@@ -4,5 +4,3 @@
 #include "Line.h"
 #include "Polygon.h"
 #include "Polyline.h"
-
-using namespace std;

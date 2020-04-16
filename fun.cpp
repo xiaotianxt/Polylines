@@ -3,34 +3,310 @@
 using namespace std;
 
 vector<PolyLine> polylines;
-vector<Point> markers_out; // 用于记录被遮挡的点
+vector<string> filenames; // 用于记录文件名称
+
+int EXPAND = 10;         // 膨胀系数
+int POS_X = 100;         // 用于定位坐标系x轴
+int POS_Y = 200;         // 定位y轴
+bool time_to_return = 0; // gui返回
+
+//绘制指定属性的直线
+static void DrawLine(HDC hDC, int x0, int y0, int x1, int y1, int style, int width, COLORREF color)
+{
+    HPEN hPen = CreatePen(style, width, color);
+    HPEN hOldPen = (HPEN)SelectObject(hDC, hPen); // 笔刷
+
+    MoveToEx(hDC, x0, y0, NULL);
+    LineTo(hDC, x1, y1);
+
+    SelectObject(hDC, hOldPen);
+    DeleteObject(hPen);
+}
+
+//绘制实心圆
+static void DrawCircle(HDC hDC, int x, int y, int len, COLORREF color)
+{
+    HBRUSH hBrush = CreateSolidBrush(color);
+    HBRUSH hOldBrush = (HBRUSH)SelectObject(hDC, hBrush);
+
+    HPEN hPen = CreatePen(PS_SOLID, 1, color);
+    HPEN hOldPen = (HPEN)SelectObject(hDC, hPen);
+
+    Ellipse(hDC, x - len / 2, y - len / 2, x + len / 2, y + len / 2);
+
+    SelectObject(hDC, hOldBrush);
+    DeleteObject(hPen);
+
+    SelectObject(hDC, hOldPen);
+    DeleteObject(hOldBrush);
+}
+
+static void DrawMarkRect(HDC hDC, double x, double y)
+{
+    int real_x = int(x * EXPAND) + POS_X;
+    int real_y = -int(y * EXPAND) + POS_Y;
+
+    DrawLine(hDC, real_x, real_y, real_x + 20 * EXPAND, real_y, PS_SOLID, 1, RGB(0, 255, 0));
+    DrawLine(hDC, real_x + 20 * EXPAND, real_y, real_x + 20 * EXPAND, real_y + 10 * EXPAND, PS_SOLID, 1, RGB(0, 255, 0));
+    DrawLine(hDC, real_x, real_y + 10 * EXPAND, real_x + 20 * EXPAND, real_y + 10 * EXPAND, PS_SOLID, 1, RGB(0, 255, 0));
+    DrawLine(hDC, real_x, real_y, real_x, real_y + 10 * EXPAND, PS_SOLID, 1, RGB(0, 255, 0));
+}
+
+static void DrawMarkRectRearrange(HDC hDC, int real_x, int real_y)
+{
+    DrawLine(hDC, real_x, real_y, real_x + 20 * EXPAND, real_y, PS_SOLID, 1, RGB(0, 255, 0));
+    DrawLine(hDC, real_x + 20 * EXPAND, real_y, real_x + 20 * EXPAND, real_y + 10 * EXPAND, PS_SOLID, 1, RGB(0, 255, 0));
+    DrawLine(hDC, real_x, real_y + 10 * EXPAND, real_x + 20 * EXPAND, real_y + 10 * EXPAND, PS_SOLID, 1, RGB(0, 255, 0));
+    DrawLine(hDC, real_x, real_y, real_x, real_y + 10 * EXPAND, PS_SOLID, 1, RGB(0, 255, 0));
+}
+
+static void DrawPolylines(HDC hDC)
+{
+    cout << "正在绘制图形..." << endl;
+    // 计算比例尺和坐标
+    // 已知程序需要长720, 宽720,
+    // 首先找到左右边界boundx, boundy
+    double xl, xr, yt, yb;
+    xl = xr = polylines[0].points[0].x;
+    yt = yb = polylines[0].points[0].y;
+    for (int i = 0; i < polylines.size(); i++)
+    {
+        for (int j = 0; j < polylines[i].points.size(); j++)
+        {
+            if (xl > polylines[i].points[j].x)
+                xl = polylines[i].points[j].x;
+            if (xr < polylines[i].points[j].x)
+                xr = polylines[i].points[j].x;
+            if (yt < polylines[i].points[j].y)
+                yt = polylines[i].points[j].y;
+            if (yb > polylines[i].points[i].y)
+                yb = polylines[i].points[j].y;
+        }
+    }
+
+    double maxlenth = 0.0; // 找到x方向长还是y方向,将长的方向放大为720像素计算比例尺
+    if ((yt - yb + 30.0) > (xr - xl + 60.0))
+    {
+        maxlenth = yt - yb + 30.0;
+    }
+    else
+    {
+        maxlenth = xr - xl + 60.0;
+    }
+    cout << "宇宙矩形长边长为" << maxlenth << endl;
+
+    // 开始寻找POS_X, POS_Y位置
+    EXPAND = int(720.0 / maxlenth); // 膨胀系数 * maxlenth <= 720.0
+    POS_X = int((20.0 - xl) * EXPAND);
+    POS_Y = int((10.0 + yt) * EXPAND);
+
+    RearrangeMarkers(); // 判断是否重叠
+
+    for (int i = 0; i < polylines.size(); i++)
+    {
+        for (int j = 0; j < polylines[i].points.size() - 1; j++) // 画出折线
+        {
+            int x0 = int(polylines[i].points[j].x * EXPAND) + POS_X;
+            int y0 = -int(polylines[i].points[j].y * EXPAND) + POS_Y;
+            int x1 = int(polylines[i].points[j + 1].x * EXPAND) + POS_X;
+            int y1 = -int(polylines[i].points[j + 1].y * EXPAND) + POS_Y;
+            DrawLine(hDC, x0, y0, x1, y1, PS_SOLID, 1, RGB(0, 0, 0));
+        }
+
+        for (int j = 0; j < polylines[i].markers.size(); j++) // 画出标记矩形
+        {
+            if (polylines[i].markrects[j].id != 0) // 如果该矩形移动了
+            {
+                int x0 = int(polylines[i].markers[j].x * EXPAND) + POS_X;
+                int y0 = -int(polylines[i].markers[j].y * EXPAND) + POS_Y;
+                int x1 = int(polylines[i].markrects[j].x);
+                int y1 = int(polylines[i].markrects[j].y);
+                DrawMarkRectRearrange(hDC, x1, y1);
+                DrawLine(hDC, x0, y0, x1, y1, PS_DOT, 1, RGB(50, 50, 50));
+                DrawCircle(hDC, x1, y1, 3, RGB(0, 0, 255));
+                continue;
+            }
+            DrawMarkRect(hDC, polylines[i].markrects[j].x, polylines[i].markrects[j].y);
+        }
+
+        for (int j = 0; j < polylines[i].markers.size(); j++) // 画出标记点
+        {
+            int x = int(polylines[i].markers[j].x * EXPAND) + POS_X;
+            int y = -int(polylines[i].markers[j].y * EXPAND) + POS_Y;
+            DrawCircle(hDC, x, y, 5, RGB(0, 0, 255));
+        }
+    }
+    time_to_return = 1; // 用于返回
+}
+
+static LRESULT CALLBACK WnzdProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    HDC hDC;
+    PAINTSTRUCT ps;
+
+    switch (message)
+    {
+    case WM_CREATE:
+        return 0;
+
+    case WM_PAINT: // 绘图消息
+    {
+        hDC = BeginPaint(hWnd, &ps);
+        //绘制不同模式的直线
+        DrawPolylines(hDC); // 开始绘图
+    }
+        EndPaint(hWnd, &ps);
+        return 0;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    }
+
+    return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+void Init()
+{
+    ReadFile(); // 获取所有文件
+
+    for (size_t i = 0; i < filenames.size(); i++)
+    {
+        cout << "回车开始第" << i + 1 << "个文件读取" << endl;
+        system("pause");
+
+        Initialize(filenames[i]); // 初始化一个文件
+
+        string temp;
+        cout << "允许使用gui生成图像,是否生成?(y/n)" << endl;
+        cin >> temp;
+        if (temp[0] == 'y' || temp[0] == 'Y') // 匹配不到直接按不生成处理
+        {
+            cout << "开始生成!" << endl;
+
+            DrawWindow();
+        }
+        else
+        {
+            cout << "跳过生成!" << endl;
+        }
+    }
+}
 
 void ReadFile()
 {
+    cout << "准备读取文件,当前路径为";
+    char buff[100];
+    _getcwd(buff, 1000);
+    cout << buff << endl;
+    string filepath = buff;
+    string format = ".txt";
+
+    GetAllFormatFiles(filepath, filenames, format); // 找到所有.txt文件
+
+    cout << "找到的文件有" << endl;
+    for (int i = 0; i < filenames.size(); i++) // 去除所有Result.txt
+    {
+        smatch result;
+        regex pattern("Result_[\\s\\S]*");
+        try
+        {
+            if (regex_match(filenames[i], result, pattern))
+            {
+                cout << "去除" << filenames[i] << endl;
+                filenames.erase(filenames.begin() + i); // 清除当前文件
+                i--;                                    // 补上i的减小
+            }
+            else
+            {
+                cout << filenames[i] << endl;
+            }
+        }
+        catch (const char *msg) // 文件打开错误
+        {
+            cerr << msg << endl;
+        }
+    }
+
+    return;
 }
 
-void Initialize()
+void DrawWindow()
+{
+    HINSTANCE hInstance;
+    hInstance = GetModuleHandle(NULL);
+    WNDCLASS Draw;
+    Draw.cbClsExtra = 0;
+    Draw.cbWndExtra = 0;
+    Draw.hCursor = LoadCursor(hInstance, IDC_ARROW);
+
+    Draw.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
+
+    Draw.lpszMenuName = NULL;
+    Draw.style = CS_HREDRAW | CS_VREDRAW;
+    Draw.hbrBackground = (HBRUSH)COLOR_WINDOW;
+    Draw.lpfnWndProc = WnzdProc;
+    Draw.lpszClassName = _T("DDraw");
+    Draw.hInstance = hInstance;
+
+    RegisterClass(&Draw);
+
+    HWND hwnd = CreateWindow(
+        _T("DDraw"),         //上面注册的类名，要完全一致
+        _T("abd"),           //窗口标题文字
+        WS_OVERLAPPEDWINDOW, //窗口外观样式
+        38,                  //窗口相对于父级的X坐标
+        20,                  //窗口相对于父级的Y坐标
+        1280,                //窗口的宽度
+        720,                 //窗口的高度
+        NULL,                //没有父窗口，为NULL
+        NULL,                //没有菜单，为NULL
+        hInstance,           //当前应用程序的实例句柄
+        NULL);               //没有附加数据，为NULL
+
+    // 显示窗口
+    ShowWindow(hwnd, SW_SHOW);
+
+    // 更新窗口
+    UpdateWindow(hwnd);
+
+    // 消息循环
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+        if (time_to_return)
+        {
+            time_to_return = 0;
+            system("pause");
+            return;
+        }
+    }
+}
+
+void Initialize(string file)
 {
     /***************** 读取文件 ******************/
-    ifstream fin; // 读取文件流
-    ofstream fout;
-    string temp;           // 临时储存输入
-    string file = "input"; // 文件路径
-    int num = 0;           // 记录折线数量
-    int file_num = 0;
+    ifstream fin;  // 读取文件流
+    ofstream fout; // 打印文件
+    string temp;   // 临时储存输入
+    int num = 0;   // 记录折线数量
     char mode = 0; // 模式
-    cout << "回车默认读取工程目录下的input*.txt，或输入你想要打开的文件路径" << endl;
+    // cout << "回车默认读取工程目录下的input*.txt，或输入你想要打开的文件路径" << endl;
 
-    char c = getchar(); // 判断是否输入的是回车
+    // char c = getchar(); // 判断是否输入的是回车
 
-    if (c != '\n') // 如果输入的不是回车,说明需要打开自己的文件
-    {
-        cin.putback(c);
-        cin >> file;
-    }
-    cout << "/***************** 开始读取文件 ******************/" << endl;
+    // if (c != '\n') // 如果输入的不是回车,说明需要打开自己的文件
+    // {
+    //     cin.putback(c);
+    //     cin >> file;
+    // }
 
-    file = file + to_string(file_num) + ".txt";
+    vector<PolyLine> newlines; // 新建vector
+    newlines.swap(polylines);  // 清空上次内容
+    cout << "/***************** 开始读取文件" << file << "******************/" << endl;
+
     fin.open(file);
     if (fin.is_open()) // 打开成功
     {
@@ -96,18 +372,20 @@ void Initialize()
     fin.close();
     cout << "文件读取完毕！！ ";
 
+    /***************** 开始计算 ******************/
+
     cout << "开始计算" << endl;
 
     for (size_t i = 0; i < polylines.size(); i++)
     {
         if (mode == 'A')
         {
-            polylines[i].markers = Polychotomy(polylines[i]);
+            polylines[i].markers = Polychotomy(polylines[i]); // A方法
             polylines[i].markrects = polylines[i].markers;
         }
         if (mode == 'B')
         {
-            polylines[i].markers = EquiSpace(polylines[i]);
+            polylines[i].markers = EquiSpace(polylines[i]); // B方法
             polylines[i].markrects = polylines[i].markers;
         }
     }
@@ -115,14 +393,18 @@ void Initialize()
     cout << "计算完成!" << endl;
 
     /***************** 打印坐标 ******************/
+
     for (size_t i = 0; i < polylines.size(); i++)
     {
         cout << "Polyline" << i + 1 << " :\n";
         cout << polylines[i].markers.size() << endl;
         cout << polylines[i].MarkerStr() << endl;
     }
+    string outfile = "Result_" + file;
 
-    fout.open("Result.txt");
+    /***************** 写入文件 ******************/
+
+    fout.open(outfile);
     if (fout)
     {
         for (size_t i = 0; i < polylines.size(); i++)
@@ -134,6 +416,7 @@ void Initialize()
         fout << flush;
     }
     fout.close();
+    cout << "结果已存储在" << outfile << "中" << endl;
 }
 
 vector<Point> Polychotomy(PolyLine polyline)
@@ -156,7 +439,7 @@ vector<Point> Polychotomy(PolyLine polyline)
             temp_remain += polyline.lenths[i + 1]; // 补上距离
             i++;                                   // i递增检查下一个
         }
-        while (temp <= temp_remain) // 只要当前边还能标记
+        while (compare(temp, temp_remain) >= 0) // 只要当前边还能标记
         {
             Point temp_point = Linechotomy(polyline.points[i], polyline.points[i - 1], temp_remain - temp);
             mark_points.push_back(temp_point);
@@ -206,7 +489,7 @@ vector<Point> EquiSpace(PolyLine polyline)
                             return answer; // 直接返回
                         }
                     }
-                    vector<Point> points_remain;
+                    vector<Point> points_remain; // 注意from + remain + to
                     points_remain.push_back(temp_from);
                     answer.push_back(temp_from);
                     if (i != j)
@@ -223,7 +506,7 @@ vector<Point> EquiSpace(PolyLine polyline)
                         answer.end(),
                         points_remain.begin(),
                         points_remain.end());
-                    answer.push_back(temp_to);
+                    answer.push_back(temp_to); // 结果应当是 from - remain - to
                     return answer;
                 }
             }
@@ -280,7 +563,7 @@ void RearrangeMarkers()
             {
                 for (int jj = 0; jj < polylines[ii].markers.size(); jj++)
                 {
-                    cout << "寻找点" << polylines[i].markers[j].Str() << "和" << polylines[ii].markers[jj].Str() << endl;
+                    //cout << "寻找点" << polylines[i].markers[j].Str() << "和" << polylines[ii].markers[jj].Str() << endl;
                     if (ii == i && jj == j) // 此时不需要比较,是同一个点
                     {
                         continue;
@@ -330,7 +613,7 @@ void RearrangeMarkers()
                         }
                         else
                         {
-                            cout << "我尽力了, 好像不太行嗷" << endl;
+                            cout << "我尽力了, 算法好像不太行嗷" << endl;
                             cout << "打印目前分配的矩形" << endl;
                             return;
                         }

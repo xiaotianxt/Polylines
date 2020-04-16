@@ -46,24 +46,28 @@ vector<string> GetFiles(string cate_dir)
 	sort(files.begin(), files.end());
 	return files;
 }
-
-vector<string> FileName(string pattern)
+void GetAllFormatFiles(string path, vector<string>& files, string format)
 {
-	char current_address[100];
-	memset(current_address, 0, 100);
-	getcwd(current_address, 100); //获取当前路径
-	cout << current_address << endl;
-	strcat(current_address, "\\*");
-
-	vector<string> files = GetFiles((string)current_address);
-	vector<string> targetfiles;
-
-	for (int i = 0; i < files.size(); i++)
+	//文件句柄  
+	long long hFile = 0;
+	//文件信息  
+	struct _finddata_t fileinfo;
+	string p;
+	if ((hFile = _findfirst(p.assign(path).append("\\*" + format).c_str(), &fileinfo)) != -1) // 找到第一个*.format结尾的文件
 	{
-		cout << files[i] << endl;
-	}
+		do
+		{
+			if ((fileinfo.attrib & _A_SUBDIR))
+			{
+				continue; // 跳过子目录
+			}
 
-	cout << "end..." << endl;
-	cin.get();
-	return targetfiles;
+			else
+			{
+				files.push_back(fileinfo.name);
+			}
+		} while (_findnext(hFile, &fileinfo) == 0); // 遍历所有文件
+
+		_findclose(hFile);
+	}
 }
