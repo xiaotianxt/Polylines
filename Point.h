@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include "util.h"
 
 using namespace std;
 
-class Point //¿ÉÒÔ²æ³ËºÍµã³Ë
+class Point //å¯ä»¥å‰ä¹˜å’Œç‚¹ä¹˜
 {
 public:
     double x, y;
@@ -11,16 +11,16 @@ public:
     Point(double x_, double y_);
     Point(string x_, string y_);
     Point();
-    string Str() const;                  // ´òÓ¡¸ÃµãµÄ×ø±ê£¨µ÷ÊÔÓÃ£©
-    bool operator<(const Point &) const; // ÓÃÓÚÅÅÁĞ×ø±ê£¨ºÃÏñÃ»É¶ÓÃÁË
+    string Str() const;                  // æ‰“å°è¯¥ç‚¹çš„åæ ‡ï¼ˆè°ƒè¯•ç”¨ï¼‰
+    bool operator<(const Point &) const; // ç”¨äºæ’åˆ—åæ ‡ï¼ˆå¥½åƒæ²¡å•¥ç”¨äº†
                                          // TODO:
     bool operator>(const Point &) const;
-    bool operator==(const Point &) const; // ÅĞ¶ÏÏàµÈ
+    bool operator==(const Point &) const; // åˆ¤æ–­ç›¸ç­‰
 
-    Point operator-(const Point &) const;  // ¼õ·¨
-    Point operator+(const Point &) const;  // ¼Ó·¨
-    double operator*(const Point &)const;  // µã»ı
-    double operator^(const Point &) const; // ¶şÎ¬²æ»ı
+    Point operator-(const Point &) const;  // å‡æ³•
+    Point operator+(const Point &) const;  // åŠ æ³•
+    double operator*(const Point &)const;  // ç‚¹ç§¯
+    double operator^(const Point &) const; // äºŒç»´å‰ç§¯
 };
 
 double FindLenth(Point a, Point b);

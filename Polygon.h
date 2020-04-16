@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "util.h"
 #include "Line.h"
 
@@ -11,13 +11,13 @@ public:
     size_t type = 0;
     double bound_yu, bound_yd, bound_xl, bound_xr;
 
-    PolyGon(vector<Line> lines_, size_t type); // ³õÊ¼»¯
+    PolyGon(vector<Line> lines_, size_t type); // åˆå§‹åŒ–
     PolyGon();
-    bool sortlines();  // ½«¶à±ßĞÎÕûÀíÎªÊ×Î²ÏàÁ¬£¨Ë³±ãÅĞ¶ÏÊÇ·ñÊ×Î²ÏàÁ¬
-    bool checkcross(); // ¼ì²é¶à±ßĞÎÊÇ·ñÓĞ½»²æ
-    void findbound();  // ²éÕÒÍâ°ü¾ØĞÎ
-    double area();     // ¼ÆËã¶à±ßĞÎÃæ»ı
-    bool checkconv();  // ¼ì²é¶à±ßĞÎÊÇ·ñÊÇÍ¹¶à±ßĞÎ
+    bool sortlines();  // å°†å¤šè¾¹å½¢æ•´ç†ä¸ºé¦–å°¾ç›¸è¿ï¼ˆé¡ºä¾¿åˆ¤æ–­æ˜¯å¦é¦–å°¾ç›¸è¿
+    bool checkcross(); // æ£€æŸ¥å¤šè¾¹å½¢æ˜¯å¦æœ‰äº¤å‰
+    void findbound();  // æŸ¥æ‰¾å¤–åŒ…çŸ©å½¢
+    double area();     // è®¡ç®—å¤šè¾¹å½¢é¢ç§¯
+    bool checkconv();  // æ£€æŸ¥å¤šè¾¹å½¢æ˜¯å¦æ˜¯å‡¸å¤šè¾¹å½¢
     bool in(Point point);
     string Str();
     string showbound();

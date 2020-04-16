@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "util.h"
 #include "Point.h"
 
@@ -7,18 +7,17 @@ using namespace std;
 class PolyLine
 {
 public:
-    vector<Point> points; // ÓÃÓÚ¼ÇÂ¼ËùÓÐ½Úµã
-    vector<double> lenths; // ÓÃÓÚ¼ÇÂ¼³¤¶È
-    vector<Point> markers;//ÓÃÓÚ¼ÇÂ¼±ê¼ÇµãµÄ³¤¶È
-    vector<Point> markrects; // ÓÃÓÚ¼ÇÂ¼±ê¼Ç¾ØÐÎ×óÉÏ·½µÄ×ø±ê
+    vector<Point> points;    // ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½ï¿½Ð½Úµï¿½
+    vector<double> lenths;   // ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
+    vector<Point> markers;   //ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½Çµï¿½Ä³ï¿½ï¿½ï¿½
+    vector<Point> markrects; // ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     double lenth = 0.0;
     string mode;
 
-    
-    PolyLine(vector<Point> _points, string mode); // ³õÊ¼»¯    
-    void findlenth(); // ¼ÆËã³¤¶È    
-    string MarkerStr(); // ÓÃÓÚÊä³ö±ê¼Ç½á¹û
-    friend ostream& operator<<(ostream& out, const PolyLine &polygon);
+    PolyLine(vector<Point> _points, string mode); // ï¿½ï¿½Ê¼ï¿½ï¿½
+    void findlenth();                             // ï¿½ï¿½ï¿½ã³¤ï¿½ï¿½
+    string MarkerStr();                           // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½
+    friend ostream &operator<<(ostream &out, const PolyLine &polygon);
 };
 
-ostream& operator<<(ostream& out, const PolyLine& polyline);
+ostream &operator<<(ostream &out, const PolyLine &polyline);

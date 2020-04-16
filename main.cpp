@@ -1,13 +1,13 @@
-#include <windows.h>
+ï»¿#include <windows.h>
 #include <tchar.h>
 #include "fun.h"
-#define BLACK_COLOR RGB(0, 0, 0) // ºÚÉ«
+#define BLACK_COLOR RGB(0, 0, 0) // é»‘è‰²
 using namespace std;
 int EXPAND = 10;
 int POS_X = 100;
 int POS_Y = 200;
 
-//»æÖÆÖ¸¶¨ÊôĞÔµÄÖ±Ïß
+//ç»˜åˆ¶æŒ‡å®šå±æ€§çš„ç›´çº¿
 static void DrawLine(HDC hDC, int x0, int y0, int x1, int y1, int style, int width, COLORREF color)
 {
 	HPEN hPen = CreatePen(style, width, color);
@@ -19,7 +19,7 @@ static void DrawLine(HDC hDC, int x0, int y0, int x1, int y1, int style, int wid
 	SelectObject(hDC, hOldPen);
 	DeleteObject(hPen);
 }
-//»æÖÆÊµĞÄÔ²
+//ç»˜åˆ¶å®å¿ƒåœ†
 static void DrawCircle(HDC hDC, int x, int y, int len, COLORREF color)
 {
 	HBRUSH hBrush = CreateSolidBrush(color);
@@ -37,7 +37,7 @@ static void DrawCircle(HDC hDC, int x, int y, int len, COLORREF color)
 	DeleteObject(hOldBrush);
 }
 
-//»æÖÆÌî³ä¾ØĞÎ
+//ç»˜åˆ¶å¡«å……çŸ©å½¢
 static void DrawRect(HDC hDC, int left, int top, int width, int height, int style, COLORREF color)
 {
 	HBRUSH hBrush = CreateHatchBrush(style, color);
@@ -68,7 +68,7 @@ static void DrawMarkRectRearrange(HDC hDC, int real_x, int real_y)
 	DrawLine(hDC, real_x, real_y, real_x, real_y + 10 * EXPAND, PS_SOLID, 1, RGB(0, 255, 0));
 }
 
-//»æÖÆÎ»Í¼Ìî³ä¾ØĞÎ
+//ç»˜åˆ¶ä½å›¾å¡«å……çŸ©å½¢
 static void DrawBmpRect(HDC hDC, int left, int top, int width, int height, LPCTSTR file)
 {
 	HBITMAP hBitmap = (HBITMAP)LoadImage(NULL, file, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
@@ -81,14 +81,14 @@ static void DrawBmpRect(HDC hDC, int left, int top, int width, int height, LPCTS
 	DeleteObject(hOldBrush);
 	DeleteObject(hBitmap);
 }
-// ÏûÏ¢´¦Àíº¯ÊıµÄÊµÏÖ
+// æ¶ˆæ¯å¤„ç†å‡½æ•°çš„å®ç°
 
 static void DrawPolylines(HDC hDC)
 {
-	cout << "ÕıÔÚ»æÖÆÍ¼ĞÎ..." << endl;
-	// ¼ÆËãÅòÕÍÏµÊıºÍ×ø±ê
-	// ÒÑÖª³ÌĞòĞèÒª³¤720, ¿í720,
-	// Ê×ÏÈÕÒµ½×óÓÒ±ß½çboundx, boundy
+	cout << "æ­£åœ¨ç»˜åˆ¶å›¾å½¢..." << endl;
+	// è®¡ç®—è†¨èƒ€ç³»æ•°å’Œåæ ‡
+	// å·²çŸ¥ç¨‹åºéœ€è¦é•¿720, å®½720,
+	// é¦–å…ˆæ‰¾åˆ°å·¦å³è¾¹ç•Œboundx, boundy
 	double xl, xr, yt, yb;
 	xl = xr = polylines[0].points[0].x;
 	yt = yb = polylines[0].points[0].y;
@@ -115,14 +115,14 @@ static void DrawPolylines(HDC hDC)
 	{
 		maxlenth = xr - xl + 60.0;
 	}
-	cout << "ÓîÖæ¾ØĞÎ³¤±ß³¤Îª" << maxlenth << endl;
+	cout << "å®‡å®™çŸ©å½¢é•¿è¾¹é•¿ä¸º" << maxlenth << endl;
 
-	// ¿ªÊ¼Ñ°ÕÒPOS_X, POS_YÎ»ÖÃ
-	EXPAND = int(720.0 / maxlenth); // ÅòÕÍÏµÊı * maxlenth <= 720.0
+	// å¼€å§‹å¯»æ‰¾POS_X, POS_Yä½ç½®
+	EXPAND = int(720.0 / maxlenth); // è†¨èƒ€ç³»æ•° * maxlenth <= 720.0
 	POS_X = int((20.0 - xl) * EXPAND);
 	POS_Y = int((10.0 + yt) * EXPAND);
 
-	RearrangeMarkers(); // ÅĞ¶ÏÊÇ·ñÖØµş
+	RearrangeMarkers(); // åˆ¤æ–­æ˜¯å¦é‡å 
 
 	for (int i = 0; i < polylines.size(); i++)
 	{
@@ -137,7 +137,7 @@ static void DrawPolylines(HDC hDC)
 
 		for (int j = 0; j < polylines[i].markers.size(); j++)
 		{
-			if (polylines[i].markrects[j].id != 0) // Èç¹û¸Ã¾ØĞÎÒÆ¶¯ÁË
+			if (polylines[i].markrects[j].id != 0) // å¦‚æœè¯¥çŸ©å½¢ç§»åŠ¨äº†
 			{
 				int x0 = int(polylines[i].markers[j].x * EXPAND) + POS_X;
 				int y0 = -int(polylines[i].markers[j].y * EXPAND) + POS_Y;
@@ -173,7 +173,7 @@ static LRESULT CALLBACK WnzdProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 	case WM_PAINT:
 	{
 		hDC = BeginPaint(hWnd, &ps);
-		//»æÖÆ²»Í¬Ä£Ê½µÄÖ±Ïß
+		//ç»˜åˆ¶ä¸åŒæ¨¡å¼çš„ç›´çº¿
 		DrawPolylines(hDC);
 	}
 		EndPaint(hWnd, &ps);
@@ -209,25 +209,25 @@ int _tmain(int argc, _TCHAR *argv[])
 	RegisterClass(&Draw);
 
 	HWND hwnd = CreateWindow(
-		_T("DDraw"),		 //ÉÏÃæ×¢²áµÄÀàÃû£¬ÒªÍêÈ«Ò»ÖÂ
-		_T("abd"),			 //´°¿Ú±êÌâÎÄ×Ö
-		WS_OVERLAPPEDWINDOW, //´°¿ÚÍâ¹ÛÑùÊ½
-		38,					 //´°¿ÚÏà¶ÔÓÚ¸¸¼¶µÄX×ø±ê
-		20,					 //´°¿ÚÏà¶ÔÓÚ¸¸¼¶µÄY×ø±ê
-		1280,				 //´°¿ÚµÄ¿í¶È
-		720,				 //´°¿ÚµÄ¸ß¶È
-		NULL,				 //Ã»ÓĞ¸¸´°¿Ú£¬ÎªNULL
-		NULL,				 //Ã»ÓĞ²Ëµ¥£¬ÎªNULL
-		hInstance,			 //µ±Ç°Ó¦ÓÃ³ÌĞòµÄÊµÀı¾ä±ú
-		NULL);				 //Ã»ÓĞ¸½¼ÓÊı¾İ£¬ÎªNULL
+		_T("DDraw"),		 //ä¸Šé¢æ³¨å†Œçš„ç±»åï¼Œè¦å®Œå…¨ä¸€è‡´
+		_T("abd"),			 //çª—å£æ ‡é¢˜æ–‡å­—
+		WS_OVERLAPPEDWINDOW, //çª—å£å¤–è§‚æ ·å¼
+		38,					 //çª—å£ç›¸å¯¹äºçˆ¶çº§çš„Xåæ ‡
+		20,					 //çª—å£ç›¸å¯¹äºçˆ¶çº§çš„Yåæ ‡
+		1280,				 //çª—å£çš„å®½åº¦
+		720,				 //çª—å£çš„é«˜åº¦
+		NULL,				 //æ²¡æœ‰çˆ¶çª—å£ï¼Œä¸ºNULL
+		NULL,				 //æ²¡æœ‰èœå•ï¼Œä¸ºNULL
+		hInstance,			 //å½“å‰åº”ç”¨ç¨‹åºçš„å®ä¾‹å¥æŸ„
+		NULL);				 //æ²¡æœ‰é™„åŠ æ•°æ®ï¼Œä¸ºNULL
 
-	// ÏÔÊ¾´°¿Ú
+	// æ˜¾ç¤ºçª—å£
 	ShowWindow(hwnd, SW_SHOW);
 
-	// ¸üĞÂ´°¿Ú
+	// æ›´æ–°çª—å£
 	UpdateWindow(hwnd);
 
-	// ÏûÏ¢Ñ­»·
+	// æ¶ˆæ¯å¾ªç¯
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0))
 	{

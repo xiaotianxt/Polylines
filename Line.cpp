@@ -1,6 +1,6 @@
-#include "Line.h"
+ï»¿#include "Line.h"
 
-Line::Line(double x1, double y1, double x2, double y2) // ÓÃÓÚ³õÊ¼»¯Ò»ÌõÏß
+Line::Line(double x1, double y1, double x2, double y2) // ç”¨äºåˆå§‹åŒ–ä¸€æ¡çº¿
 {
     Point from_(x1, y1);
     Point to_(x2, y2);
@@ -9,7 +9,7 @@ Line::Line(double x1, double y1, double x2, double y2) // ÓÃÓÚ³õÊ¼»¯Ò»ÌõÏß
     to = to_;
 }
 
-Line::Line(string x1, string y1, string x2, string y2) // ³õÊ¼»¯Ïß
+Line::Line(string x1, string y1, string x2, string y2) // åˆå§‹åŒ–çº¿
 {
     Point from_(atof(x1.c_str()), atof(y1.c_str()));
     Point to_(atof(x2.c_str()), atof(y2.c_str()));
@@ -18,19 +18,19 @@ Line::Line(string x1, string y1, string x2, string y2) // ³õÊ¼»¯Ïß
     to = to_;
 }
 
-Line::Line(Point from_, Point to_) // ÓÃÓÚ³õÊ¼»¯Ò»ÌõÏß£¬ÓÃÓÚÅĞ¶ÏµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
+Line::Line(Point from_, Point to_) // ç”¨äºåˆå§‹åŒ–ä¸€æ¡çº¿ï¼Œç”¨äºåˆ¤æ–­ç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…éƒ¨
 {
     from = from_;
     to = to_;
 }
 
-string Line::Str() // ÓÃÓÚ´òÓ¡Ä³µã×ø±ê£¨µ÷ÊÔÓÃ£©
+string Line::Str() // ç”¨äºæ‰“å°æŸç‚¹åæ ‡ï¼ˆè°ƒè¯•ç”¨ï¼‰
 {
     string temp = from.Str() + " --> " + to.Str();
     return temp;
 }
 
-void Line::Swap() // ÓÃÓÚ½»»»fromºÍto
+void Line::Swap() // ç”¨äºäº¤æ¢fromå’Œto
 {
     Point temp = from;
     from = to;
@@ -38,16 +38,16 @@ void Line::Swap() // ÓÃÓÚ½»»»fromºÍto
     return;
 }
 
-bool Line::on(Point point) // ÅĞ¶ÏµãÔÚÏß¶ÎÉÏ
+bool Line::on(Point point) // åˆ¤æ–­ç‚¹åœ¨çº¿æ®µä¸Š
 {
-    if ((from.x - point.x) * (to.x - point.x) > 0 || (from.y - point.y) * (to.y - point.y) > 0) // µãÈç¹û²»ÔÚÏß¶ÎËùÔÚµÄÍâ°ü¾ØĞÎÉÏÔòÒ»¶¨²»ÔÚÏß¶ÎÉÏ
+    if ((from.x - point.x) * (to.x - point.x) > 0 || (from.y - point.y) * (to.y - point.y) > 0) // ç‚¹å¦‚æœä¸åœ¨çº¿æ®µæ‰€åœ¨çš„å¤–åŒ…çŸ©å½¢ä¸Šåˆ™ä¸€å®šä¸åœ¨çº¿æ®µä¸Š
     {
         return false;
     }
     else
     {
         if (
-            ((from - point) ^ (to - point), 0.0)) // µãÈç¹ûÓëfrom to Í¬ÏòÔòÒ»¶¨ÔÚÏß¶ÎÉÏ
+            ((from - point) ^ (to - point), 0.0)) // ç‚¹å¦‚æœä¸from to åŒå‘åˆ™ä¸€å®šåœ¨çº¿æ®µä¸Š
         {
             return true;
         }
@@ -55,32 +55,32 @@ bool Line::on(Point point) // ÅĞ¶ÏµãÔÚÏß¶ÎÉÏ
     }
 }
 
-double Line::operator^(const Line &b) const // ÖØÔØÏòÁ¿ºÍÏòÁ¿²æ»ı
+double Line::operator^(const Line &b) const // é‡è½½å‘é‡å’Œå‘é‡å‰ç§¯
 {
     return ((this->to) - (this->from)) ^ (b.to - b.from);
 }
 
-bool CheckCross(Line a, Line b) // ²é¿´Á½ÌõÏßÊÇ·ñÏà½»£¨²»¹æ·¶Ïà½»Ò²Ëã
+bool CheckCross(Line a, Line b) // æŸ¥çœ‹ä¸¤æ¡çº¿æ˜¯å¦ç›¸äº¤ï¼ˆä¸è§„èŒƒç›¸äº¤ä¹Ÿç®—
 {
-    double p1 = (a.to - a.from) ^ (b.from - a.from); // ÓÃÓÚ¼ÇÂ¼ËùÓĞ²æ»ı
+    double p1 = (a.to - a.from) ^ (b.from - a.from); // ç”¨äºè®°å½•æ‰€æœ‰å‰ç§¯
     double p2 = (a.to - a.from) ^ (b.to - a.from);
     double p3 = (b.to - b.from) ^ (a.from - b.from);
     double p4 = (b.to - b.from) ^ (a.to - b.from);
 
-    /***************** ·Ç¹æ·¶Ïà½» ******************/
+    /***************** éè§„èŒƒç›¸äº¤ ******************/
 
-    if (a.on(b.from) || a.on(b.to) || b.on(a.from) || b.on(a.to)) // µ«·²ÓĞµãÔÚÏß¶ÎÉÏ£¬¶¼ÊÇ·Ç¹æ·¶Ïà½»
+    if (a.on(b.from) || a.on(b.to) || b.on(a.from) || b.on(a.to)) // ä½†å‡¡æœ‰ç‚¹åœ¨çº¿æ®µä¸Šï¼Œéƒ½æ˜¯éè§„èŒƒç›¸äº¤
     {
         return true;
     }
 
-    /***************** ÅĞ¶Ï¹æ·¶Ïà½» ******************/
-    if (p1 * p2 < 0 && p3 * p4 < 0) // È«²¿ÒìºÅ£¬ËµÃ÷¹æ·¶Ïà½»
+    /***************** åˆ¤æ–­è§„èŒƒç›¸äº¤ ******************/
+    if (p1 * p2 < 0 && p3 * p4 < 0) // å…¨éƒ¨å¼‚å·ï¼Œè¯´æ˜è§„èŒƒç›¸äº¤
     {
         return true;
     }
     else
     {
-        return false; // ·ñÔò²»Ïà½»
+        return false; // å¦åˆ™ä¸ç›¸äº¤
     }
 }

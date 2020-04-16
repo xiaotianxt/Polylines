@@ -1,6 +1,6 @@
-#include "Point.h"
+ï»¿#include "Point.h"
 
-Point::Point(double x_, double y_) // ÓÃÓÚ³õÊ¼»¯Point
+Point::Point(double x_, double y_) // ç”¨äºåˆå§‹åŒ–Point
 {
     x = x_;
     y = y_;
@@ -8,44 +8,44 @@ Point::Point(double x_, double y_) // ÓÃÓÚ³õÊ¼»¯Point
 
 Point::Point(string x_, string y_)
 {
-    x = atof(x_.c_str()); // string×ª»»ÎªĞ¡Êı
+    x = atof(x_.c_str()); // stringè½¬æ¢ä¸ºå°æ•°
     y = atof(y_.c_str());
 }
 
-Point::Point() // ÓÃÓÚÁÙÊ±Éú³ÉÒ»¸öPoint
+Point::Point() // ç”¨äºä¸´æ—¶ç”Ÿæˆä¸€ä¸ªPoint
 {
     x = 0;
     y = 0;
 }
 
-string Point::Str() const // ÓÃÓÚÊä³öµãµÄ×ø±ê£¨µ÷ÊÔÓÃ£©
+string Point::Str() const // ç”¨äºè¾“å‡ºç‚¹çš„åæ ‡ï¼ˆè°ƒè¯•ç”¨ï¼‰
 {
     string temp = "(" + to_string(x) + " , " + to_string(y) + ")";
     return temp;
 }
 
 /*
-Point¶Ô±ÈÔ­Ôò£º
-    ºá×ø±ê´óµÄµã¸ü´ó
-    ºá×ø±êÒ»ÑùµÄµã£¬×İ×ø±ê´óµÄµã¸ü´ó
+Pointå¯¹æ¯”åŸåˆ™ï¼š
+    æ¨ªåæ ‡å¤§çš„ç‚¹æ›´å¤§
+    æ¨ªåæ ‡ä¸€æ ·çš„ç‚¹ï¼Œçºµåæ ‡å¤§çš„ç‚¹æ›´å¤§
 */
 bool Point::operator<(const Point &other) const
 {
-    if (this->x < other.x) // ×Ô¼ººá×ø±ê¸üĞ¡
+    if (this->x < other.x) // è‡ªå·±æ¨ªåæ ‡æ›´å°
         return true;
-    else if (this->x == other.x) //ºá×ø±êÏàµÈ±È½Ï×İ×ø±ê
+    else if (this->x == other.x) //æ¨ªåæ ‡ç›¸ç­‰æ¯”è¾ƒçºµåæ ‡
     {
-        if (this->y < other.y) // ×Ô¼º×İ×ø±ê¸üĞ¡
+        if (this->y < other.y) // è‡ªå·±çºµåæ ‡æ›´å°
         {
             return true;
         }
     }
-    return false; // ÆäËûÇé¿öÏÂ£¬×Ô¼º¶¼Î´±ØĞ¡
+    return false; // å…¶ä»–æƒ…å†µä¸‹ï¼Œè‡ªå·±éƒ½æœªå¿…å°
 }
 
 bool Point::operator>(const Point &other) const
 {
-    if (this->x > other.x) // ²Î¿¼ÉÏÃæº¯Êı
+    if (this->x > other.x) // å‚è€ƒä¸Šé¢å‡½æ•°
     {
         return true;
     }
@@ -59,29 +59,29 @@ bool Point::operator>(const Point &other) const
     return false;
 }
 
-bool Point::operator==(const Point &other) const // ÅĞ¶ÏÁ½×ø±êÊÇ·ñÏàµÈ£¨²¹³¥Îó²î£©
+bool Point::operator==(const Point &other) const // åˆ¤æ–­ä¸¤åæ ‡æ˜¯å¦ç›¸ç­‰ï¼ˆè¡¥å¿è¯¯å·®ï¼‰
 {
     return (equal(this->x, other.x) && equal(this->y, other.y));
 }
 
-Point Point::operator-(const Point &other) const // ÖØÔØ¼õ·¨ÔËËã
+Point Point::operator-(const Point &other) const // é‡è½½å‡æ³•è¿ç®—
 {
     Point temp(this->x - other.x, this->y - other.y);
     return temp;
 }
 
-Point Point::operator+(const Point &other) const // ÖØÔØ¼Ó·¨ÔËËã
+Point Point::operator+(const Point &other) const // é‡è½½åŠ æ³•è¿ç®—
 {
     Point temp(this->x + other.x, this->y + other.y);
     return temp;
 }
 
-double Point::operator*(const Point &other) const // ÖØÔØµã»ı
+double Point::operator*(const Point &other) const // é‡è½½ç‚¹ç§¯
 {
     return x * other.x + y * other.y;
 }
 
-double Point::operator^(const Point &other) const // ÖØÔØ²æ»ı£¨¿ÉÒÔÀí½âÎªz·½Ïò×ø±êÈ«Îª0µÄÏòÁ¿²æ»ı£¬½á¹û¿´×öÒ»Î¬£©
+double Point::operator^(const Point &other) const // é‡è½½å‰ç§¯ï¼ˆå¯ä»¥ç†è§£ä¸ºzæ–¹å‘åæ ‡å…¨ä¸º0çš„å‘é‡å‰ç§¯ï¼Œç»“æœçœ‹åšä¸€ç»´ï¼‰
 {
     return x * other.y - y * other.x;
 }

@@ -1,13 +1,13 @@
-#include "Polyline.h"
+ï»¿#include "Polyline.h"
 
-PolyLine::PolyLine(vector<Point> _points, string _mode) : points(_points), mode(_mode) // ³õÊ¼»¯
+PolyLine::PolyLine(vector<Point> _points, string _mode) : points(_points), mode(_mode) // åˆå§‹åŒ–
 {
     findlenth();
 }
 
 void PolyLine::findlenth()
 {
-    lenths.push_back(0.0); // µÚÒ»¸öµã¶ÔÓ¦µÄ³¤¶ÈÊÇ0
+    lenths.push_back(0.0); // ç¬¬ä¸€ä¸ªç‚¹å¯¹åº”çš„é•¿åº¦æ˜¯0
     lenth = 0.0;
     for (size_t i = 1; i < points.size(); i++)
     {

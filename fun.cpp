@@ -1,80 +1,84 @@
-#include "fun.h"
+ï»¿#include "fun.h"
 
 using namespace std;
 
 vector<PolyLine> polylines;
-vector<Point> markers_out; // ÓÃÓÚ¼ÇÂ¼±»ÕÚµ²µÄµã
+vector<Point> markers_out; // ç”¨äºè®°å½•è¢«é®æŒ¡çš„ç‚¹
+
+void ReadFile()
+{
+}
 
 void Initialize()
 {
-    /***************** ¶ÁÈ¡ÎÄ¼ş ******************/
-    ifstream fin; // ¶ÁÈ¡ÎÄ¼şÁ÷
+    /***************** è¯»å–æ–‡ä»¶ ******************/
+    ifstream fin; // è¯»å–æ–‡ä»¶æµ
     ofstream fout;
-    string temp;           // ÁÙÊ±´¢´æÊäÈë
-    string file = "input"; // ÎÄ¼şÂ·¾¶
-    int num = 0;           // ¼ÇÂ¼ÕÛÏßÊıÁ¿
+    string temp;           // ä¸´æ—¶å‚¨å­˜è¾“å…¥
+    string file = "input"; // æ–‡ä»¶è·¯å¾„
+    int num = 0;           // è®°å½•æŠ˜çº¿æ•°é‡
     int file_num = 0;
-    char mode = 0; // Ä£Ê½
-    cout << "»Ø³µÄ¬ÈÏ¶ÁÈ¡¹¤³ÌÄ¿Â¼ÏÂµÄinput*.txt£¬»òÊäÈëÄãÏëÒª´ò¿ªµÄÎÄ¼şÂ·¾¶" << endl;
+    char mode = 0; // æ¨¡å¼
+    cout << "å›è½¦é»˜è®¤è¯»å–å·¥ç¨‹ç›®å½•ä¸‹çš„input*.txtï¼Œæˆ–è¾“å…¥ä½ æƒ³è¦æ‰“å¼€çš„æ–‡ä»¶è·¯å¾„" << endl;
 
-    char c = getchar(); // ÅĞ¶ÏÊÇ·ñÊäÈëµÄÊÇ»Ø³µ
+    char c = getchar(); // åˆ¤æ–­æ˜¯å¦è¾“å…¥çš„æ˜¯å›è½¦
 
-    if (c != '\n') // Èç¹ûÊäÈëµÄ²»ÊÇ»Ø³µ,ËµÃ÷ĞèÒª´ò¿ª×Ô¼ºµÄÎÄ¼ş
+    if (c != '\n') // å¦‚æœè¾“å…¥çš„ä¸æ˜¯å›è½¦,è¯´æ˜éœ€è¦æ‰“å¼€è‡ªå·±çš„æ–‡ä»¶
     {
         cin.putback(c);
         cin >> file;
     }
-    cout << "/***************** ¿ªÊ¼¶ÁÈ¡ÎÄ¼ş ******************/" << endl;
+    cout << "/***************** å¼€å§‹è¯»å–æ–‡ä»¶ ******************/" << endl;
 
     file = file + to_string(file_num) + ".txt";
     fin.open(file);
-    if (fin.is_open()) // ´ò¿ª³É¹¦
+    if (fin.is_open()) // æ‰“å¼€æˆåŠŸ
     {
         smatch result;
-        int i = 0, size = 0; // ¼ÇÂ¼Â¼ÈëµÄµÚi×éÊı¾İ
-        string mark;         // ÓÃÓÚ¼ÇÂ¼±ê¼ÇµãÊı(¹æ¶¨¼ä¸ô)
+        int i = 0, size = 0; // è®°å½•å½•å…¥çš„ç¬¬iç»„æ•°æ®
+        string mark;         // ç”¨äºè®°å½•æ ‡è®°ç‚¹æ•°(è§„å®šé—´éš”)
         regex pattern("(A|B)\\s*");
-        regex counter("(\\d+)\\s*");                            // Æ¥ÅäÕÛÏßÊıÁ¿
-        regex catalog("(\\d+)\\s(\\d+\\.?\\d*)\\s*");           // Æ¥ÅäÕÛÏß¿ªÍ·µÄÁ½¸öÊı×Ö
-        regex data("(-?\\d+\\.?\\d*)\\s*(-?\\d+\\.?\\d*)\\s*"); // Æ¥ÅäµãµÄ×ø±ê
+        regex counter("(\\d+)\\s*");                            // åŒ¹é…æŠ˜çº¿æ•°é‡
+        regex catalog("(\\d+)\\s(\\d+\\.?\\d*)\\s*");           // åŒ¹é…æŠ˜çº¿å¼€å¤´çš„ä¸¤ä¸ªæ•°å­—
+        regex data("(-?\\d+\\.?\\d*)\\s*(-?\\d+\\.?\\d*)\\s*"); // åŒ¹é…ç‚¹çš„åæ ‡
         while (!fin.eof())
         {
-            getline(fin, temp); // »ñÈ¡Ä£Ê½
+            getline(fin, temp); // è·å–æ¨¡å¼
             try
             {
-                if (regex_match(temp, result, pattern)) // Ñ¡ÔñÆ¥Åä³É¹¦
+                if (regex_match(temp, result, pattern)) // é€‰æ‹©åŒ¹é…æˆåŠŸ
                 {
-                    cout << "ÄãÑ¡ÔñµÄÊÇ" << result[1] << endl
-                         << "¿ªÊ¼¶ÁÈëÎÄ¼ş...." << endl;
-                    mode = result[1].str()[0]; // Ğ´Èëmode
-                    while (!fin.eof())         // ·ÀÖ¹ÎÄ¼ş¶ÁÈëÊ§°Ü
+                    cout << "ä½ é€‰æ‹©çš„æ˜¯" << result[1] << endl
+                         << "å¼€å§‹è¯»å…¥æ–‡ä»¶...." << endl;
+                    mode = result[1].str()[0]; // å†™å…¥mode
+                    while (!fin.eof())         // é˜²æ­¢æ–‡ä»¶è¯»å…¥å¤±è´¥
                     {
                         if (regex_match(temp, result, counter))
                         {
                             num = atoi(result[1].str().c_str());
                         }
-                        getline(fin, temp);                     // Ê×ÏÈ¶ÁÈëÒ»ĞĞÊı¾İ,ÓÃÀ´Æ¥ÅäÕÛÏßµãÊı+±ê¼ÇµãÊı(ÕÛÏßµãÊı+¹æ¶¨¼ä¸ô)
-                        if (regex_match(temp, result, catalog)) // Æ¥Åäµ½
+                        getline(fin, temp);                     // é¦–å…ˆè¯»å…¥ä¸€è¡Œæ•°æ®,ç”¨æ¥åŒ¹é…æŠ˜çº¿ç‚¹æ•°+æ ‡è®°ç‚¹æ•°(æŠ˜çº¿ç‚¹æ•°+è§„å®šé—´éš”)
+                        if (regex_match(temp, result, catalog)) // åŒ¹é…åˆ°
                         {
                             vector<Point> points;
-                            size = atoi(result[1].str().c_str()); // ¼ÇÂ¼´óĞ¡
+                            size = atoi(result[1].str().c_str()); // è®°å½•å¤§å°
                             mark = result[2].str();
-                            cout << "¿ªÊ¼¶ÁÈ¡µÚ" << i + 1 << "ÌõÕÛÏß" << endl;
-                            while (!fin.eof()) // ·ÀÖ¹ÎÄ¼ş¶ÁÈëÊ§°Ü
+                            cout << "å¼€å§‹è¯»å–ç¬¬" << i + 1 << "æ¡æŠ˜çº¿" << endl;
+                            while (!fin.eof()) // é˜²æ­¢æ–‡ä»¶è¯»å…¥å¤±è´¥
                             {
-                                getline(fin, temp); // ¶ÁÈëÒ»ĞĞÊı¾İ
+                                getline(fin, temp); // è¯»å…¥ä¸€è¡Œæ•°æ®
 
-                                if (regex_match(temp, result, data)) // Æ¥Åä×ø±ê
+                                if (regex_match(temp, result, data)) // åŒ¹é…åæ ‡
                                 {
                                     Point temp_point(result[1], result[2]);
-                                    points.push_back(temp_point); // ·ÅÈëµãĞòÁĞ
+                                    points.push_back(temp_point); // æ”¾å…¥ç‚¹åºåˆ—
                                 }
 
                                 if (points.size() == size)
                                 {
                                     PolyLine temp_polyline(points, mark);
                                     cout << temp_polyline;
-                                    polylines.push_back(temp_polyline); // ¼ÓÈëÒ»ÌõÕÛÏß
+                                    polylines.push_back(temp_polyline); // åŠ å…¥ä¸€æ¡æŠ˜çº¿
                                     i++;
                                     break;
                                 }
@@ -90,9 +94,9 @@ void Initialize()
         }
     }
     fin.close();
-    cout << "ÎÄ¼ş¶ÁÈ¡Íê±Ï£¡£¡ ";
+    cout << "æ–‡ä»¶è¯»å–å®Œæ¯•ï¼ï¼ ";
 
-    cout << "¿ªÊ¼¼ÆËã" << endl;
+    cout << "å¼€å§‹è®¡ç®—" << endl;
 
     for (size_t i = 0; i < polylines.size(); i++)
     {
@@ -108,9 +112,9 @@ void Initialize()
         }
     }
 
-    cout << "¼ÆËãÍê³É!" << endl;
+    cout << "è®¡ç®—å®Œæˆ!" << endl;
 
-    /***************** ´òÓ¡×ø±ê ******************/
+    /***************** æ‰“å°åæ ‡ ******************/
     for (size_t i = 0; i < polylines.size(); i++)
     {
         cout << "Polyline" << i + 1 << " :\n";
@@ -137,27 +141,27 @@ vector<Point> Polychotomy(PolyLine polyline)
     int n = atoi(polyline.mode.c_str());
     double average_lenth = 0.0;
     vector<Point> mark_points;
-    double temp_remain = 0.0; // ¼ÇÂ¼i-1 iÊ£Óà¾àÀë
-    double temp = 0.0;        // ¼ÇÂ¼Ğè±ê¼ÇµãÓëi-1µã¾àÀë
+    double temp_remain = 0.0; // è®°å½•i-1 iå‰©ä½™è·ç¦»
+    double temp = 0.0;        // è®°å½•éœ€æ ‡è®°ç‚¹ä¸i-1ç‚¹è·ç¦»
 
-    average_lenth = polyline.lenth / (double)(n + 1); // ×Ü³¤¶È
-    temp = average_lenth;                             // ³õÊ¼»¯temp³¤¶È
+    average_lenth = polyline.lenth / (double)(n + 1); // æ€»é•¿åº¦
+    temp = average_lenth;                             // åˆå§‹åŒ–tempé•¿åº¦
     for (int i = 1; i < polyline.points.size(); i++)
     {
-        // ¶ÔÓÚĞÂµãi
-        temp_remain += polyline.lenths[i]; // Ê£Óà¾àÀë¼ÓÉÏi-1µ½iµÄ¾àÀë
+        // å¯¹äºæ–°ç‚¹i
+        temp_remain += polyline.lenths[i]; // å‰©ä½™è·ç¦»åŠ ä¸Ši-1åˆ°içš„è·ç¦»
 
-        while (compare(temp_remain, temp) == 1 && i < polyline.points.size() - 1) // Ö»Òªµ±Ç°Ïß¶ÎÊ£Óà³¤¶È<temp
+        while (compare(temp_remain, temp) == 1 && i < polyline.points.size() - 1) // åªè¦å½“å‰çº¿æ®µå‰©ä½™é•¿åº¦<temp
         {
-            temp_remain += polyline.lenths[i + 1]; // ²¹ÉÏ¾àÀë
-            i++;                                   // iµİÔö¼ì²éÏÂÒ»¸ö
+            temp_remain += polyline.lenths[i + 1]; // è¡¥ä¸Šè·ç¦»
+            i++;                                   // ié€’å¢æ£€æŸ¥ä¸‹ä¸€ä¸ª
         }
-        while (temp <= temp_remain) // Ö»Òªµ±Ç°±ß»¹ÄÜ±ê¼Ç
+        while (temp <= temp_remain) // åªè¦å½“å‰è¾¹è¿˜èƒ½æ ‡è®°
         {
             Point temp_point = Linechotomy(polyline.points[i], polyline.points[i - 1], temp_remain - temp);
             mark_points.push_back(temp_point);
             temp_remain -= temp;
-        } // ´ËÊ±temp_remain < temp
+        } // æ­¤æ—¶temp_remain < temp
     }
     mark_points.pop_back();
     return mark_points;
@@ -172,34 +176,34 @@ Point Linechotomy(Point from, Point to, double len)
 vector<Point> EquiSpace(PolyLine polyline)
 {
     vector<Point> answer;
-    const double delete_lenth = fmod(polyline.lenth, atof(polyline.mode.c_str())) / 2; // Á½±ßÓ¦µ±Ê¡ÂÔµÄ¾àÀë
-    if (compare(delete_lenth, 0.0) == 0)                                               // Èç¹ûµÈÓÚÁã,Ö±½Ó·Ö¸î¼´¿É
+    const double delete_lenth = fmod(polyline.lenth, atof(polyline.mode.c_str())) / 2; // ä¸¤è¾¹åº”å½“çœç•¥çš„è·ç¦»
+    if (compare(delete_lenth, 0.0) == 0)                                               // å¦‚æœç­‰äºé›¶,ç›´æ¥åˆ†å‰²å³å¯
     {
         string mode = to_string(int(polyline.lenth / atof(polyline.mode.c_str())) - 1);
         return Polychotomy(PolyLine(polyline.points, mode));
     }
-    double temp_remain = 0.0;                        // ¼ÇÂ¼i - 1, i Ê£Óà¾àÀë
-    for (int i = 1; i < polyline.points.size(); i++) // ²é¿´×Ü³¤¶ÈÊÇ·ñ³¬¹ıdeletelenth, ÕâÑù²ÅÄÜÈ·¶¨µãµÄÎ»ÖÃ
+    double temp_remain = 0.0;                        // è®°å½•i - 1, i å‰©ä½™è·ç¦»
+    for (int i = 1; i < polyline.points.size(); i++) // æŸ¥çœ‹æ€»é•¿åº¦æ˜¯å¦è¶…è¿‡deletelenth, è¿™æ ·æ‰èƒ½ç¡®å®šç‚¹çš„ä½ç½®
     {
-        temp_remain += polyline.lenths[i];            // ¼ÓÉÏ i i-1 µÄ¾àÀë
-        if (compare(temp_remain, delete_lenth) == -1) // Èç¹ûtemp_remainµÄ¾àÀë¸ü´ó,ËµÃ÷¿ÉÒÔ¼ÓÁË
+        temp_remain += polyline.lenths[i];            // åŠ ä¸Š i i-1 çš„è·ç¦»
+        if (compare(temp_remain, delete_lenth) == -1) // å¦‚æœtemp_remainçš„è·ç¦»æ›´å¤§,è¯´æ˜å¯ä»¥åŠ äº†
         {
             Point temp_from = Linechotomy(polyline.points[i], polyline.points[i - 1], temp_remain - delete_lenth);
 
             temp_remain = 0.0;
             for (int j = polyline.points.size() - 1; j >= 1; j++)
             {
-                temp_remain += polyline.lenths[j];            // ¼ÓÉÏj j-1 µÄ¾àÀë
-                if (compare(temp_remain, delete_lenth) == -1) // Èç¹ûtemp_remainµÄ¾àÀë¸ü´ó,ËµÃ÷¿ÉÒÔÇĞÁË
+                temp_remain += polyline.lenths[j];            // åŠ ä¸Šj j-1 çš„è·ç¦»
+                if (compare(temp_remain, delete_lenth) == -1) // å¦‚æœtemp_remainçš„è·ç¦»æ›´å¤§,è¯´æ˜å¯ä»¥åˆ‡äº†
                 {
                     Point temp_to = Linechotomy(polyline.points[j - 1], polyline.points[j], temp_remain - delete_lenth);
 
-                    if (i == j) // ÓĞ¿ÉÄÜfromºÍtoÖØºÏÁË,Ò»À´¼ò»¯¼ÆËã,¶şÀ´·ÀÖ¹ÒòÎªÖØµşµ¼ÖÂµÄ´íÎó
+                    if (i == j) // æœ‰å¯èƒ½fromå’Œtoé‡åˆäº†,ä¸€æ¥ç®€åŒ–è®¡ç®—,äºŒæ¥é˜²æ­¢å› ä¸ºé‡å å¯¼è‡´çš„é”™è¯¯
                     {
-                        if (temp_from == temp_to) // Èç¹ûÖØºÏ,ËµÃ÷Ã»ÓĞÆäËûµãÁË
+                        if (temp_from == temp_to) // å¦‚æœé‡åˆ,è¯´æ˜æ²¡æœ‰å…¶ä»–ç‚¹äº†
                         {
                             answer.push_back(temp_from);
-                            return answer; // Ö±½Ó·µ»Ø
+                            return answer; // ç›´æ¥è¿”å›
                         }
                     }
                     vector<Point> points_remain;
@@ -213,7 +217,7 @@ vector<Point> EquiSpace(PolyLine polyline)
                             polyline.points.begin() + j);
                     }
                     string mode = to_string(int(polyline.lenth / atof(polyline.mode.c_str())) - 1);
-                    points_remain.push_back(temp_to); // µ÷ÓÃÖ®Ç°µÄº¯Êı
+                    points_remain.push_back(temp_to); // è°ƒç”¨ä¹‹å‰çš„å‡½æ•°
                     points_remain = Polychotomy(PolyLine(points_remain, mode));
                     answer.insert(
                         answer.end(),
@@ -227,7 +231,7 @@ vector<Point> EquiSpace(PolyLine polyline)
         }
     }
 
-    cout << "ÊäÈë¿ÉÄÜÓĞÎó!Çë¼ì²é¼ä¾àÊÇ·ñÕıÈ·!" << endl;
+    cout << "è¾“å…¥å¯èƒ½æœ‰è¯¯!è¯·æ£€æŸ¥é—´è·æ˜¯å¦æ­£ç¡®!" << endl;
     return answer;
 }
 
@@ -235,26 +239,26 @@ void SettleRect()
 {
     for (int i = 0; i < polylines.size(); i++)
     {
-        for (int j = 0; j < polylines[i].markers.size(); j++) // Ç°Á½²ãÑ­»·Îª±éÀúËùÓĞ±ê¼Çµã
+        for (int j = 0; j < polylines[i].markers.size(); j++) // å‰ä¸¤å±‚å¾ªç¯ä¸ºéå†æ‰€æœ‰æ ‡è®°ç‚¹
         {
             for (int ii = 0; ii < polylines.size(); ii++)
             {
-                for (int jj = 0; jj < polylines[ii].markers.size(); jj++) // ºóÁ½²ãÑ­»·ÈÃÇ°ÃæµÄÃ¿¸öµãºÍÆäËûµã½øĞĞ±È½Ï
+                for (int jj = 0; jj < polylines[ii].markers.size(); jj++) // åä¸¤å±‚å¾ªç¯è®©å‰é¢çš„æ¯ä¸ªç‚¹å’Œå…¶ä»–ç‚¹è¿›è¡Œæ¯”è¾ƒ
                 {
-                    if (j == jj) // continue, ×Ô¼º²»ÓÃºÍ×Ô¼º±È½Ï
+                    if (j == jj) // continue, è‡ªå·±ä¸ç”¨å’Œè‡ªå·±æ¯”è¾ƒ
                         continue;
-                    if (fabs(polylines[i].markrects[j].x - polylines[ii].markrects[jj].x) > 20) // Èç¹ûx,y×ø±êÓĞÒ»Õß³¬¹ı·¶Î§ËµÃ÷²»¿ÉÄÜÏà½»
+                    if (fabs(polylines[i].markrects[j].x - polylines[ii].markrects[jj].x) > 20) // å¦‚æœx,yåæ ‡æœ‰ä¸€è€…è¶…è¿‡èŒƒå›´è¯´æ˜ä¸å¯èƒ½ç›¸äº¤
                         continue;
                     if (fabs(polylines[i].markrects[j].y - polylines[ii].markrects[jj].y) > 10)
                         continue;
-                    // Ê£ÏÂµÄÒòÎªÍâ°ü¾ØĞÎÏà½»ËùÒÔÒ»¶¨Ïà½»
+                    // å‰©ä¸‹çš„å› ä¸ºå¤–åŒ…çŸ©å½¢ç›¸äº¤æ‰€ä»¥ä¸€å®šç›¸äº¤
                 }
             }
         }
     }
 }
 
-bool Overlap(Point a, Point b) // ÅĞ¶Ï±ê¼Ç¾ØĞÎÊÇ·ñÖØµş
+bool Overlap(Point a, Point b) // åˆ¤æ–­æ ‡è®°çŸ©å½¢æ˜¯å¦é‡å 
 {
     return (fabs(a.x - b.x) < 20.0 && fabs(a.y - b.y) < 10.0);
 }
@@ -262,45 +266,45 @@ bool Overlap(Point a, Point b) // ÅĞ¶Ï±ê¼Ç¾ØĞÎÊÇ·ñÖØµş
 void RearrangeMarkers()
 {
     extern int EXPAND;
-    int count = 0; // ¼ÇÂ¼ÖØµş±ê¼Ç¾ØĞÎÊıÁ¿
+    int count = 0; // è®°å½•é‡å æ ‡è®°çŸ©å½¢æ•°é‡
 
-    int num_buffer_col = int(72.0 / EXPAND);                      // Ò»ÁĞ¿ÉÒÔ·Å¼¸¸ö±ê¼Ç
-    int num_buffer_row = int(36.0 / EXPAND) - 2;                  // Ò»ĞĞ¿ÉÒÔ·Å¼¸¸ö±ê¼Ç
-    int num_whole_main = 2 * num_buffer_col + 2 * num_buffer_row; // 720*720µÄ½çÃæ¿ÉÒÔ·Å¶àÉÙ
+    int num_buffer_col = int(72.0 / EXPAND);                      // ä¸€åˆ—å¯ä»¥æ”¾å‡ ä¸ªæ ‡è®°
+    int num_buffer_row = int(36.0 / EXPAND) - 2;                  // ä¸€è¡Œå¯ä»¥æ”¾å‡ ä¸ªæ ‡è®°
+    int num_whole_main = 2 * num_buffer_col + 2 * num_buffer_row; // 720*720çš„ç•Œé¢å¯ä»¥æ”¾å¤šå°‘
     int num_whole_right = num_buffer_col * int(2.8 / EXPAND);
     for (int i = 0; i < polylines.size(); i++)
     {
-        for (int j = 0; j < polylines[i].markers.size(); j++) // ±éÀúÃ¿Ò»¸ö±ê¼Çµã
+        for (int j = 0; j < polylines[i].markers.size(); j++) // éå†æ¯ä¸€ä¸ªæ ‡è®°ç‚¹
         {
             for (int ii = 0; ii < polylines.size(); ii++)
             {
                 for (int jj = 0; jj < polylines[ii].markers.size(); jj++)
                 {
-                    cout << "Ñ°ÕÒµã" << polylines[i].markers[j].Str() << "ºÍ" << polylines[ii].markers[jj].Str() << endl;
-                    if (ii == i && jj == j) // ´ËÊ±²»ĞèÒª±È½Ï,ÊÇÍ¬Ò»¸öµã
+                    cout << "å¯»æ‰¾ç‚¹" << polylines[i].markers[j].Str() << "å’Œ" << polylines[ii].markers[jj].Str() << endl;
+                    if (ii == i && jj == j) // æ­¤æ—¶ä¸éœ€è¦æ¯”è¾ƒ,æ˜¯åŒä¸€ä¸ªç‚¹
                     {
                         continue;
                     }
-                    if (polylines[ii].markrects[jj].id != 0 || polylines[i].markrects[j].id != 0) // ´ËÊ±ÓĞÒ»¸öÒÑ¾­Íê³ÉÁË,ÎŞĞë±È½Ï
+                    if (polylines[ii].markrects[jj].id != 0 || polylines[i].markrects[j].id != 0) // æ­¤æ—¶æœ‰ä¸€ä¸ªå·²ç»å®Œæˆäº†,æ— é¡»æ¯”è¾ƒ
                         continue;
-                    if (Overlap(polylines[ii].markers[jj], polylines[i].markers[j])) // Èç¹ûÁ½¸öµãÖØµşÁË,ĞèÒª¶Ôi,j×ö³öµ÷Õû
+                    if (Overlap(polylines[ii].markers[jj], polylines[i].markers[j])) // å¦‚æœä¸¤ä¸ªç‚¹é‡å äº†,éœ€è¦å¯¹i,jåšå‡ºè°ƒæ•´
                     {
                         double x, y;
                         polylines[i].markrects[j].id = 1;
                         count++;
-                        if (count <= num_whole_main) // Èç¹û»¹ÄÜ·ÅÔÚ720*720µÄ¿òÖĞ
+                        if (count <= num_whole_main) // å¦‚æœè¿˜èƒ½æ”¾åœ¨720*720çš„æ¡†ä¸­
                         {
-                            if (count <= num_buffer_col) // Èç¹ûÄÜ·ÅÔÚµÚÒ»ÁĞ
+                            if (count <= num_buffer_col) // å¦‚æœèƒ½æ”¾åœ¨ç¬¬ä¸€åˆ—
                             {
                                 x = double(720 - 20 * EXPAND);
                                 y = double((count - 1) * 10 * EXPAND);
                             }
-                            else if (count > num_buffer_col && count <= num_buffer_col + num_buffer_row) // Èç¹ûÄÜ·ÅÔÚµÚÒ»ĞĞ
+                            else if (count > num_buffer_col && count <= num_buffer_col + num_buffer_row) // å¦‚æœèƒ½æ”¾åœ¨ç¬¬ä¸€è¡Œ
                             {
                                 x = double((count - num_buffer_col) * 20 * EXPAND);
                                 y = double(720 - 10 * EXPAND);
                             }
-                            else if (count <= 2 * num_buffer_col + num_buffer_row) // ·ÅÔÚµÚ¶şÁĞ
+                            else if (count <= 2 * num_buffer_col + num_buffer_row) // æ”¾åœ¨ç¬¬äºŒåˆ—
                             {
                                 x = 0;
                                 y = double((count - num_buffer_col - num_buffer_row - 1) * 10 * EXPAND);
@@ -316,8 +320,8 @@ void RearrangeMarkers()
                         }
                         else if (count <= num_whole_main + num_whole_right)
                         {
-                            int id_col = int((count - num_whole_main - 1) / num_buffer_col + 1); // ÔÚµÚid_colÁĞ
-                            int id_row = int((count - num_whole_main - 1) % num_buffer_col) + 1; // ÔÚµÚid_rowĞĞ
+                            int id_col = int((count - num_whole_main - 1) / num_buffer_col + 1); // åœ¨ç¬¬id_colåˆ—
+                            int id_row = int((count - num_whole_main - 1) % num_buffer_col) + 1; // åœ¨ç¬¬id_rowè¡Œ
                             x = double(720 + (id_col - 1) * EXPAND * 20);
                             y = double((id_row - 1) * EXPAND * 10);
                             polylines[i].markrects[j].x = x;
@@ -326,8 +330,8 @@ void RearrangeMarkers()
                         }
                         else
                         {
-                            cout << "ÎÒ¾¡Á¦ÁË, ºÃÏñ²»Ì«ĞĞà»" << endl;
-                            cout << "´òÓ¡Ä¿Ç°·ÖÅäµÄ¾ØĞÎ" << endl;
+                            cout << "æˆ‘å°½åŠ›äº†, å¥½åƒä¸å¤ªè¡Œå—·" << endl;
+                            cout << "æ‰“å°ç›®å‰åˆ†é…çš„çŸ©å½¢" << endl;
                             return;
                         }
                     }

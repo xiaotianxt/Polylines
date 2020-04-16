@@ -1,21 +1,21 @@
-#pragma once
+ï»¿#pragma once
 #include "util.h"
 #include "spatial_util.h"
 
 using namespace std;
 
-extern vector<PolyLine> polylines; // È«¾Ö±äÁ¿ÓÃÓÚ±£´æËùÓĞÕÛÏß
+extern vector<PolyLine> polylines; // å…¨å±€å˜é‡ç”¨äºä¿å­˜æ‰€æœ‰æŠ˜çº¿
 extern vector<Point> markers_out;
 
 void Initialize();
 
 vector<Point> Polychotomy(PolyLine);
 
-Point Linechotomy(Point from, Point to, double len); // ¸ø¶¨Á½µã£¬·µ»Øfromµ½to·½ÏòÉÏ¾àÀëlenµÄµã×ø±ê
+Point Linechotomy(Point from, Point to, double len); // ç»™å®šä¸¤ç‚¹ï¼Œè¿”å›fromåˆ°toæ–¹å‘ä¸Šè·ç¦»lençš„ç‚¹åæ ‡
 
 vector<Point> EquiSpace(PolyLine polyline);
 
-void SettleRect(); // ÓÃÓÚÅ²¶¯ËùÓĞµÄ¶à±ßĞÎ
+void SettleRect(); // ç”¨äºæŒªåŠ¨æ‰€æœ‰çš„å¤šè¾¹å½¢
 
 bool Overlap(Point, Point);
 

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "util.h"
 #include "Point.h"
 using namespace std;
@@ -6,15 +6,14 @@ using namespace std;
 class Line
 {
 public:
-    Point from, to;                     // ÒòÎª¶à±ßĞÎÃ»ÓĞ·çÏò£¬¹æ¶¨Éú³ÉµÄµã´ÓĞ¡Ö¸Ïò´ó£¨µ±È»Èç¹ûÊäÈëµÄµã×ø±êÒ»Ñù²»ÄÜ¸Ä³ÆÎª±ß£¬Ó¦µ±±¨´í£©
-    Line(double, double, double, double); // ³õÊ¼»¯
+    Point from, to;                       // å› ä¸ºå¤šè¾¹å½¢æ²¡æœ‰é£å‘ï¼Œè§„å®šç”Ÿæˆçš„ç‚¹ä»å°æŒ‡å‘å¤§ï¼ˆå½“ç„¶å¦‚æœè¾“å…¥çš„ç‚¹åæ ‡ä¸€æ ·ä¸èƒ½æ”¹ç§°ä¸ºè¾¹ï¼Œåº”å½“æŠ¥é”™ï¼‰
+    Line(double, double, double, double); // åˆå§‹åŒ–
     Line(string, string, string, string);
     Line(Point, Point);
-    string Str(); // debugÓÃ£¬´òÓ¡Ïß
-    void Swap();  // ½»»»fromºÍto
-    bool on(Point); // ÅĞ¶ÏµãÊÇ·ñÔÚ±ßÉÏ
-    double operator^(const Line& b) const;
+    string Str();   // debugç”¨ï¼Œæ‰“å°çº¿
+    void Swap();    // äº¤æ¢fromå’Œto
+    bool on(Point); // åˆ¤æ–­ç‚¹æ˜¯å¦åœ¨è¾¹ä¸Š
+    double operator^(const Line &b) const;
 };
 
-bool CheckCross(Line a, Line b);// ²é¿´Á½ÌõÏßÊÇ·ñÏà½»£¨²»¹æ·¶Ïà½»Ò²Ëã
-
+bool CheckCross(Line a, Line b); // æŸ¥çœ‹ä¸¤æ¡çº¿æ˜¯å¦ç›¸äº¤ï¼ˆä¸è§„èŒƒç›¸äº¤ä¹Ÿç®—

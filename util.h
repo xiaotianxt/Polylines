@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #pragma warning(disable : 4996)
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -25,11 +25,11 @@ bool equal(double a, double b);
 int compare(double a, double b);
 
 /*********************************
-* Ãû³Æ£º		GetFiles
-* ÃèÊö£º		ÓÃÓÚ·µ»Ø¸ø¶¨Â·¾¶ÏÂµÄËùÓĞÎÄ¼ş
+* åç§°ï¼š		GetFiles
+* æè¿°ï¼š		ç”¨äºè¿”å›ç»™å®šè·¯å¾„ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
 * 
-* ²ÎÊı£º		string cate_dir
-* ·µ»ØÖµ£º	vector<string> 
+* å‚æ•°ï¼š		string cate_dir
+* è¿”å›å€¼ï¼š	vector<string> 
 *********************************/
 vector<string> GetFiles(string cate_dir);
 

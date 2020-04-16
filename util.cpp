@@ -1,10 +1,10 @@
-#include "util.h"
+ï»¿#include "util.h"
 
 const double eps = 1e-8; // double precision
 
-bool equal(double a, double b) // ÓÃÓÚÅĞ¶ÏÁ½¸ö¸¡µãÊıÊÇ·ñÏàµÈ¡£¾«¶ÈÎªeps.
+bool equal(double a, double b) // ç”¨äºåˆ¤æ–­ä¸¤ä¸ªæµ®ç‚¹æ•°æ˜¯å¦ç›¸ç­‰ã€‚ç²¾åº¦ä¸ºeps.
 {
-	if ((a - b) > -eps && (a - b) < eps) // ·ÀÖ¹Îó²î
+	if ((a - b) > -eps && (a - b) < eps) // é˜²æ­¢è¯¯å·®
 		return true;
 	else
 		return false;
@@ -12,21 +12,21 @@ bool equal(double a, double b) // ÓÃÓÚÅĞ¶ÏÁ½¸ö¸¡µãÊıÊÇ·ñÏàµÈ¡£¾«¶ÈÎªeps.
 
 int compare(double a, double b)
 {
-	// a ±È b ´ó·µ»Ø -1
-	if ((a - b) - eps > 0) // Èç¹û¼õÈ¥eps»¹±È0´óÄÇ²ÅÊÇÕæµÄ´ó
+	// a æ¯” b å¤§è¿”å› -1
+	if ((a - b) - eps > 0) // å¦‚æœå‡å»epsè¿˜æ¯”0å¤§é‚£æ‰æ˜¯çœŸçš„å¤§
 		return -1;
-	// b ±È a ´ó·µ»Ø 1
-	if ((b - a) - eps > 0) // Í¬ÉÏ
+	// b æ¯” a å¤§è¿”å› 1
+	if ((b - a) - eps > 0) // åŒä¸Š
 		return 1;
 	return 0;
 }
 
 vector<string> GetFiles(string cate_dir)
 {
-	vector<string> files; //´æ·ÅÎÄ¼şÃû
+	vector<string> files; //å­˜æ”¾æ–‡ä»¶å
 	_finddata_t file;
 	long lf;
-	//ÊäÈëÎÄ¼ş¼ĞÂ·¾¶
+	//è¾“å…¥æ–‡ä»¶å¤¹è·¯å¾„
 	if ((lf = _findfirst(cate_dir.c_str(), &file)) == -1)
 	{
 		cout << cate_dir << " not found!!!" << endl;
@@ -35,14 +35,14 @@ vector<string> GetFiles(string cate_dir)
 	{
 		while (_findnext(lf, &file) == 0)
 		{
-			//Êä³öÎÄ¼şÃû
+			//è¾“å‡ºæ–‡ä»¶å
 			if (strcmp(file.name, ".") == 0 || strcmp(file.name, "..") == 0)
 				continue;
 			files.push_back(file.name);
 		}
 	}
 	_findclose(lf);
-	//ÅÅĞò£¬°´´ÓĞ¡µ½´óÅÅĞò
+	//æ’åºï¼ŒæŒ‰ä»å°åˆ°å¤§æ’åº
 	sort(files.begin(), files.end());
 	return files;
 }
@@ -51,7 +51,7 @@ vector<string> FileName(string pattern)
 {
 	char current_address[100];
 	memset(current_address, 0, 100);
-	getcwd(current_address, 100); //»ñÈ¡µ±Ç°Â·¾¶
+	getcwd(current_address, 100); //è·å–å½“å‰è·¯å¾„
 	cout << current_address << endl;
 	strcat(current_address, "\\*");
 

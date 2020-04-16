@@ -1,6 +1,6 @@
-#include "Polygon.h"
+ï»¿#include "Polygon.h"
 
-PolyGon::PolyGon(vector<Line> lines_, size_t type_) // ¶à±ßĞÎ³õÊ¼»¯£¨²¢ÅĞ¶Ï¶à±ßĞÎÀàĞÍ£©
+PolyGon::PolyGon(vector<Line> lines_, size_t type_) // å¤šè¾¹å½¢åˆå§‹åŒ–ï¼ˆå¹¶åˆ¤æ–­å¤šè¾¹å½¢ç±»å‹ï¼‰
 {
     lines = lines_;
     type = type_;
@@ -13,53 +13,53 @@ PolyGon::PolyGon(vector<Line> lines_, size_t type_) // ¶à±ßĞÎ³õÊ¼»¯£¨²¢ÅĞ¶Ï¶à±ßĞ
 PolyGon::PolyGon() {}
 
 bool PolyGon::sortlines()
-// ÓÃÓÚÑ°ÕÒ¶Ëµã
+// ç”¨äºå¯»æ‰¾ç«¯ç‚¹
 {
-    size_t lines_index = 0;                                              // ÉèÖÃÏß¶ÎË÷Òı
-    Point last;                                                          // ×îºóÒ»ÕÅ
-    bool flag = 0;                                                       // ÓÃÓÚ±ê¼ÇÊÇ·ñÍê³ÉÆ¥Åä
-    for (lines_index = 0; lines_index + 1 < lines.size(); lines_index++) // Ö»Òª
+    size_t lines_index = 0;                                              // è®¾ç½®çº¿æ®µç´¢å¼•
+    Point last;                                                          // æœ€åä¸€å¼ 
+    bool flag = 0;                                                       // ç”¨äºæ ‡è®°æ˜¯å¦å®ŒæˆåŒ¹é…
+    for (lines_index = 0; lines_index + 1 < lines.size(); lines_index++) // åªè¦
     {
-        last = lines[lines_index].to; // ÒÔlines[0].to×÷ÎªÆğµã²é¿´ÊÇ·ñ¿ÉÒÔ½«ËùÓĞÏß´®ÆğÀ´
+        last = lines[lines_index].to; // ä»¥lines[0].toä½œä¸ºèµ·ç‚¹æŸ¥çœ‹æ˜¯å¦å¯ä»¥å°†æ‰€æœ‰çº¿ä¸²èµ·æ¥
         flag = 0;
-        for (int target = lines_index + 1; target < lines.size(); target++) // ×¢Òâlines_index½ØÖ¹µ½µ¹ÊıµÚ¶şÎ»
+        for (int target = lines_index + 1; target < lines.size(); target++) // æ³¨æ„lines_indexæˆªæ­¢åˆ°å€’æ•°ç¬¬äºŒä½
         {
-            if ((lines[target].from) == last) // Èç¹ûÆ¥Åäµ½ÁËfrom
+            if ((lines[target].from) == last) // å¦‚æœåŒ¹é…åˆ°äº†from
             {
-                swap(lines[target], lines[lines_index + 1]); // ½«target¶ÔÓ¦µÄÏßºÍlines_indexÏÂÒ»¸ö»¥»»
+                swap(lines[target], lines[lines_index + 1]); // å°†targetå¯¹åº”çš„çº¿å’Œlines_indexä¸‹ä¸€ä¸ªäº’æ¢
                 flag = 1;
             }
-            else if ((lines[target].to) == last) // Èç¹ûtoºÍlastÆ¥ÅäÉÏ
+            else if ((lines[target].to) == last) // å¦‚æœtoå’ŒlaståŒ¹é…ä¸Š
             {
-                lines[target].Swap();                        // Ê×ÏÈĞèÒª»¥»»fromºÍto
-                swap(lines[target], lines[lines_index + 1]); // Æä´Î½«¸ÃÌõÏß·ÅÔÚlines_indexÏÂÒ»¸ö
+                lines[target].Swap();                        // é¦–å…ˆéœ€è¦äº’æ¢fromå’Œto
+                swap(lines[target], lines[lines_index + 1]); // å…¶æ¬¡å°†è¯¥æ¡çº¿æ”¾åœ¨lines_indexä¸‹ä¸€ä¸ª
                 flag = 1;
             }
         }
-        if (!flag) // Î´Íê³ÉÆ¥Åä£¬ËµÃ÷ÊäÈëÊı¾İºÜ¿ÉÄÜÓĞÎó
+        if (!flag) // æœªå®ŒæˆåŒ¹é…ï¼Œè¯´æ˜è¾“å…¥æ•°æ®å¾ˆå¯èƒ½æœ‰è¯¯
         {
-            cout << "Çë¼ì²éÄúµÄ¶à±ßĞÎÎÄ¼şÊäÈëÊÇ·ñÓĞÎó£¡£¡" << endl;
+            cout << "è¯·æ£€æŸ¥æ‚¨çš„å¤šè¾¹å½¢æ–‡ä»¶è¾“å…¥æ˜¯å¦æœ‰è¯¯ï¼ï¼" << endl;
             return false;
         }
     }
-    assert((lines[0].from) == (lines.back().to)); // Ó¦µ±Ê×Î²Ïà½Ó
+    assert((lines[0].from) == (lines.back().to)); // åº”å½“é¦–å°¾ç›¸æ¥
     return true;
 }
 
 bool PolyGon::checkcross()
 {
-    if (lines.size() < 3) // ´ËÊ±²»¿ÉÄÜ×é³É¶à±ßĞÎ
+    if (lines.size() < 3) // æ­¤æ—¶ä¸å¯èƒ½ç»„æˆå¤šè¾¹å½¢
     {
-        cout << "Ö»ÊäÈëÁË" << lines.size() << "Ìõ±ß£¬ÎŞ·¨¹¹³É¶à±ßĞÎ" << endl;
+        cout << "åªè¾“å…¥äº†" << lines.size() << "æ¡è¾¹ï¼Œæ— æ³•æ„æˆå¤šè¾¹å½¢" << endl;
         return false;
     }
     else
     {
-        for (size_t i = 0; i + 2 < lines.size(); i++) // ±éÀúËùÓĞ¶Ô±ß
+        for (size_t i = 0; i + 2 < lines.size(); i++) // éå†æ‰€æœ‰å¯¹è¾¹
         {
-            if (CheckCross(lines[i], lines[i + 2])) // Èç¹ûÓĞ½»²æ
+            if (CheckCross(lines[i], lines[i + 2])) // å¦‚æœæœ‰äº¤å‰
             {
-                cout << "ÄúÊäÈëµÄ±ß£º" << lines[i].Str() << "ºÍ" << lines[i + 2].Str() << "Ö®¼äÓĞ½»²æ" << endl;
+                cout << "æ‚¨è¾“å…¥çš„è¾¹ï¼š" << lines[i].Str() << "å’Œ" << lines[i + 2].Str() << "ä¹‹é—´æœ‰äº¤å‰" << endl;
                 return false;
             }
             else
@@ -69,13 +69,13 @@ bool PolyGon::checkcross()
     return true;
 }
 
-void PolyGon::findbound() // ²éÕÒ¶à±ßĞÎµÄÍâ°ü¾ØĞÎ£¨´ËÊ±Ã¿Ìõ±ßµÄËùÓĞfromÕıºÃ±éÀúÁËËùÓĞµã
+void PolyGon::findbound() // æŸ¥æ‰¾å¤šè¾¹å½¢çš„å¤–åŒ…çŸ©å½¢ï¼ˆæ­¤æ—¶æ¯æ¡è¾¹çš„æ‰€æœ‰fromæ­£å¥½éå†äº†æ‰€æœ‰ç‚¹
 {
-    bound_yu = lines[0].from.y; // yu, yd ¶ÔÓ¦ÉÏ½çÏÂ½ç
+    bound_yu = lines[0].from.y; // yu, yd å¯¹åº”ä¸Šç•Œä¸‹ç•Œ
     bound_yd = lines[0].from.y;
-    bound_xl = lines[0].from.x; // xl, xr ¶ÔÓ¦×ó½çÓÒ½ç
+    bound_xl = lines[0].from.x; // xl, xr å¯¹åº”å·¦ç•Œå³ç•Œ
     bound_xr = lines[0].from.x;
-    for (size_t i = 0; i < lines.size(); i++) // ±éÀúËùÓĞ±ß£¬Ñ°ÕÒ×î´óÖµ
+    for (size_t i = 0; i < lines.size(); i++) // éå†æ‰€æœ‰è¾¹ï¼Œå¯»æ‰¾æœ€å¤§å€¼
     {
         if (bound_yu < lines[i].from.y)
             bound_yu = lines[i].from.y;
@@ -90,8 +90,8 @@ void PolyGon::findbound() // ²éÕÒ¶à±ßĞÎµÄÍâ°ü¾ØĞÎ£¨´ËÊ±Ã¿Ìõ±ßµÄËùÓĞfromÕıºÃ±éÀúÁ
 
 double PolyGon::area()
 {
-    double ans = 0;                            // ÓÃÓÚ´æ·Å¼ÆËã½á¹û
-    for (int i = 0; i + 1 < lines.size(); i++) // ¼ÆËã·½Ê½£¨ÏòÁ¿Èı½ÇĞÎÃæ»ıÇóºÍ£©
+    double ans = 0;                            // ç”¨äºå­˜æ”¾è®¡ç®—ç»“æœ
+    for (int i = 0; i + 1 < lines.size(); i++) // è®¡ç®—æ–¹å¼ï¼ˆå‘é‡ä¸‰è§’å½¢é¢ç§¯æ±‚å’Œï¼‰
     {
         ans += lines[i].from.x * lines[i + 1].from.y;
         ans -= lines[i].from.y * lines[i + 1].from.x;
@@ -101,12 +101,12 @@ double PolyGon::area()
     return abs(ans / 2);
 }
 
-bool PolyGon::checkconv() // ¼ì²éÔ­Ôò£¬´ÓµÚÒ»Ìõ±ß¿ªÊ¼£¬²é¿´ÏÂÒ»Ìõ±ßºÍ´Î±ßµÄ²æ»ıÊÇ·ñÍ¬ºÅ
+bool PolyGon::checkconv() // æ£€æŸ¥åŸåˆ™ï¼Œä»ç¬¬ä¸€æ¡è¾¹å¼€å§‹ï¼ŒæŸ¥çœ‹ä¸‹ä¸€æ¡è¾¹å’Œæ¬¡è¾¹çš„å‰ç§¯æ˜¯å¦åŒå·
 {
-    double temp = lines.back() ^ lines[0]; // ½«×îºóÒ»¸öºÍµÚÒ»¸ö×ö²æ»ı
+    double temp = lines.back() ^ lines[0]; // å°†æœ€åä¸€ä¸ªå’Œç¬¬ä¸€ä¸ªåšå‰ç§¯
     for (size_t i = 0; i + 1 < lines.size(); i++)
     {
-        if (temp * (lines[i] ^ lines[i + 1]) < 0) // Èç¹û²æ»ıÒìºÅ£¬ËµÃ÷·ÇÍ¹¶à±ßĞÎ
+        if (temp * (lines[i] ^ lines[i + 1]) < 0) // å¦‚æœå‰ç§¯å¼‚å·ï¼Œè¯´æ˜éå‡¸å¤šè¾¹å½¢
         {
             return false;
         }
@@ -114,26 +114,26 @@ bool PolyGon::checkconv() // ¼ì²éÔ­Ôò£¬´ÓµÚÒ»Ìõ±ß¿ªÊ¼£¬²é¿´ÏÂÒ»Ìõ±ßºÍ´Î±ßµÄ²æ»ıÊ
     return true;
 }
 
-bool PolyGon::in(Point point) // ¼ì²éµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
+bool PolyGon::in(Point point) // æ£€æŸ¥ç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…éƒ¨
 {
-    /***************** ¼ì²éÊÇ·ñÔÚ¶à±ßĞÎÉÏ ******************/
+    /***************** æ£€æŸ¥æ˜¯å¦åœ¨å¤šè¾¹å½¢ä¸Š ******************/
     for (size_t i = 0; i < lines.size(); i++)
     {
-        if (equal(point.x, lines[i].from.x) && equal(point.y, lines[i].from.y)) // Èç¹ûµãÔÚ½»µã´¦
-        {                                                                       // µãÔÚ±ß½çÉÏ
+        if (equal(point.x, lines[i].from.x) && equal(point.y, lines[i].from.y)) // å¦‚æœç‚¹åœ¨äº¤ç‚¹å¤„
+        {                                                                       // ç‚¹åœ¨è¾¹ç•Œä¸Š
             return false;
         }
         else
         {
-            double d1 = (point - lines[i].from) ^ (lines[i].to - lines[i].from); // ×Ôfrom³ö·¢£¬ÏòpointµÄÊ¸Á¿ x ÏòtoµÄÊ¸Á¿
-            double d2 = (point - lines[i].from) ^ (lines[i].from - lines[i].to); // ×Ôto³ö·¢£¬ÏòpointµÄÊ¸Á¿ x ÏòfromµÄÊ¸Á¿
-            if (equal(d1, 0.0) && equal(d2, 0.0))                                // ËµÃ÷ÔÚ±ß*ËùÔÚµÄÖ±Ïß*ÉÏ
+            double d1 = (point - lines[i].from) ^ (lines[i].to - lines[i].from); // è‡ªfromå‡ºå‘ï¼Œå‘pointçš„çŸ¢é‡ x å‘toçš„çŸ¢é‡
+            double d2 = (point - lines[i].from) ^ (lines[i].from - lines[i].to); // è‡ªtoå‡ºå‘ï¼Œå‘pointçš„çŸ¢é‡ x å‘fromçš„çŸ¢é‡
+            if (equal(d1, 0.0) && equal(d2, 0.0))                                // è¯´æ˜åœ¨è¾¹*æ‰€åœ¨çš„ç›´çº¿*ä¸Š
             {
                 double tempx = (point.x - lines[i].from.x) * (point.x - lines[i].to.x);
                 double tempy = (point.y - lines[i].from.y) * (point.y - lines[i].to.y);
-                if (tempx > 0 || tempy > 0) // ÔÚÍ¬Ò»ÌõÖ±ÏßÉÏ£¬µ«ÔÚ¸ÃÏß¶ÎÖ®Íâ
+                if (tempx > 0 || tempy > 0) // åœ¨åŒä¸€æ¡ç›´çº¿ä¸Šï¼Œä½†åœ¨è¯¥çº¿æ®µä¹‹å¤–
                 {
-                    // ×¢Òâ¶ÔÓÚÍ¹¶à±ßĞÎ£¬´ËÊ±ÒÑ¾­¿ÉÒÔµãÔÚ¶à±ßĞÎÍâ£¬µ«ÊÇ¶ÔÓÚ°¼¶à±ßĞÎ£¬»¹ĞèÒªÅĞ¶ÏÊÇ·ñÄÜ´ÓÁíÒ»¸ö·½ÏòÉÏÕÒµ½½»µã
+                    // æ³¨æ„å¯¹äºå‡¸å¤šè¾¹å½¢ï¼Œæ­¤æ—¶å·²ç»å¯ä»¥ç‚¹åœ¨å¤šè¾¹å½¢å¤–ï¼Œä½†æ˜¯å¯¹äºå‡¹å¤šè¾¹å½¢ï¼Œè¿˜éœ€è¦åˆ¤æ–­æ˜¯å¦èƒ½ä»å¦ä¸€ä¸ªæ–¹å‘ä¸Šæ‰¾åˆ°äº¤ç‚¹
                     Point temp = point + point - lines[i].to;
                     Line radial(point, temp);
                     for (size_t j = 0; j < lines.size(); j++)
@@ -141,28 +141,28 @@ bool PolyGon::in(Point point) // ¼ì²éµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
                         if (i == j)
                             continue;
 
-                        if (CheckCross(radial, lines[j])) // ´ÓÁíÒ»¸ö·½ÏòÉÏÅĞ¶ÏºÍÆäËûµÄ±ßÊÇ·ñÓĞ½»µã
+                        if (CheckCross(radial, lines[j])) // ä»å¦ä¸€ä¸ªæ–¹å‘ä¸Šåˆ¤æ–­å’Œå…¶ä»–çš„è¾¹æ˜¯å¦æœ‰äº¤ç‚¹
                         {
-                            //µãÔÚÄÚ²¿
+                            //ç‚¹åœ¨å†…éƒ¨
                             return true;
                         }
                     }
-                    // ¶ÔÓÚÏà·´·½ÏòÉÏÃ»ÓĞ½»µãµÄ£¬ËµÃ÷ÔÚÍâ²¿
-                    // cout << "µãÔÚÍâ²¿" << endl;
+                    // å¯¹äºç›¸åæ–¹å‘ä¸Šæ²¡æœ‰äº¤ç‚¹çš„ï¼Œè¯´æ˜åœ¨å¤–éƒ¨
+                    // cout << "ç‚¹åœ¨å¤–éƒ¨" << endl;
                     return false;
                 }
                 else
                 {
-                    // cout << "µãÔÚ±ßÉÏ" << endl;
+                    // cout << "ç‚¹åœ¨è¾¹ä¸Š" << endl;
                     return false;
                 }
             }
         }
     }
 
-    /***************** ¼ì²éÊÇ·ñºÍ¶à±ßĞÎ½»µãÊıÁ¿ ******************/
-    // ÓÉÓÚĞèÒª±ÜÃâÓöµ½½»µã£¬ËÄ¸ö·½Ïò¶¼ÊÔÒ»ÏÂÈ¡×îĞ¡µÄ
-    // Point to(bound_xr + 1, point.y);          // ĞÂ½¨Ò»¸öµã£¬ÓëÅĞ¶ÏµÄµãÆ½ĞĞ£¬ÇÒÔÚÍâ°ü¾ØĞÎµÄÍâ±ß£¨³äµ±ÉäÏßµÄ¡°Ä©Î²¡±£©
+    /***************** æ£€æŸ¥æ˜¯å¦å’Œå¤šè¾¹å½¢äº¤ç‚¹æ•°é‡ ******************/
+    // ç”±äºéœ€è¦é¿å…é‡åˆ°äº¤ç‚¹ï¼Œå››ä¸ªæ–¹å‘éƒ½è¯•ä¸€ä¸‹å–æœ€å°çš„
+    // Point to(bound_xr + 1, point.y);          // æ–°å»ºä¸€ä¸ªç‚¹ï¼Œä¸åˆ¤æ–­çš„ç‚¹å¹³è¡Œï¼Œä¸”åœ¨å¤–åŒ…çŸ©å½¢çš„å¤–è¾¹ï¼ˆå……å½“å°„çº¿çš„â€œæœ«å°¾â€ï¼‰
     Point to[4];
     to[0] = Point(bound_xr + 1, point.y);
     to[1] = Point(bound_xl - 1, point.y);
@@ -172,11 +172,11 @@ bool PolyGon::in(Point point) // ¼ì²éµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
 
     for (int ito = 0; ito < 4; ito++)
     {
-        Line radial(point, to[ito]);              // ĞÂ½¨Ò»¸öÉäÏß
-        int count = 0;                            // ¼ÆÊıÆ÷
-        for (size_t i = 0; i < lines.size(); i++) // ¶ÔÓÚÃ¿Ò»Ìõ±ß£¬±éÀú²é¿´ÉäÏßÊÇ·ñ´©¹ı¶à±ßĞÎ
+        Line radial(point, to[ito]);              // æ–°å»ºä¸€ä¸ªå°„çº¿
+        int count = 0;                            // è®¡æ•°å™¨
+        for (size_t i = 0; i < lines.size(); i++) // å¯¹äºæ¯ä¸€æ¡è¾¹ï¼Œéå†æŸ¥çœ‹å°„çº¿æ˜¯å¦ç©¿è¿‡å¤šè¾¹å½¢
         {
-            if (CheckCross(radial, lines[i])) // Èç¹û½»²æ
+            if (CheckCross(radial, lines[i])) // å¦‚æœäº¤å‰
             {
                 count++;
             }
@@ -186,19 +186,19 @@ bool PolyGon::in(Point point) // ¼ì²éµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
         count = 0;
     }
 
-    if (min == 2 || min == 0) //¼«¶ËÇé¿ö£¬´ËÊ±ËµÃ÷¸ÃÉäÏßÕıºÃ½»ÔÚÁËÁ½Ìõ±ßµÄ½»µã
+    if (min == 2 || min == 0) //æç«¯æƒ…å†µï¼Œæ­¤æ—¶è¯´æ˜è¯¥å°„çº¿æ­£å¥½äº¤åœ¨äº†ä¸¤æ¡è¾¹çš„äº¤ç‚¹
     {
-        //cout << "µãÔÚÍâ²¿" << endl;
-        return false; // ²»ÔÚ
+        //cout << "ç‚¹åœ¨å¤–éƒ¨" << endl;
+        return false; // ä¸åœ¨
     }
     else
     {
-        //cout << "µãÔÚÄÚ²¿" << endl;
+        //cout << "ç‚¹åœ¨å†…éƒ¨" << endl;
         return true;
     }
 }
 
-string PolyGon::Str() // ½«¶à±ßĞÎ×ø±ê°´ÕÕ×Ö·û´®Êä³ö
+string PolyGon::Str() // å°†å¤šè¾¹å½¢åæ ‡æŒ‰ç…§å­—ç¬¦ä¸²è¾“å‡º
 {
     string temp = "  ";
     for (size_t i = 0; i < lines.size(); i++)
@@ -208,7 +208,7 @@ string PolyGon::Str() // ½«¶à±ßĞÎ×ø±ê°´ÕÕ×Ö·û´®Êä³ö
     return temp;
 }
 
-string PolyGon::showbound() // ÏëÍâ°ü¾ØĞÎ°´ÕÕ×Ö·û´®Êä³ö
+string PolyGon::showbound() // æƒ³å¤–åŒ…çŸ©å½¢æŒ‰ç…§å­—ç¬¦ä¸²è¾“å‡º
 {
     string temp = "x:  " + to_string(bound_xl) + "<--->" + to_string(bound_xr) + "\n  y:  " + to_string(bound_yd) + "<--->" + to_string(bound_yu) + "\n\n";
     return temp;
