@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "util.h"
-#include "spatial_util.h"
+#include "Point.h"
+#include "Polyline.h"
 #define BLACK_COLOR RGB(0, 0, 0) // 黑色
 
 using namespace std;

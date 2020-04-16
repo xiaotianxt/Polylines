@@ -219,7 +219,7 @@ void ReadFile()
             }
             else
             {
-                cout << filenames[i] << endl;
+                cout << filenames[i] << endl; // 输出文件名
             }
         }
         catch (const char *msg) // 文件打开错误
@@ -400,7 +400,7 @@ void Initialize(string file)
         cout << polylines[i].markers.size() << endl;
         cout << polylines[i].MarkerStr() << endl;
     }
-    string outfile = "Result_" + file;
+    string outfile = "Result\\" + file;
 
     /***************** 写入文件 ******************/
 
@@ -497,7 +497,7 @@ vector<Point> EquiSpace(PolyLine polyline)
                         points_remain.insert(
                             points_remain.end(),
                             polyline.points.begin() + i,
-                            polyline.points.begin() + j);
+                            polyline.points.begin() + j); // 加上中间的点,调用A方法计算
                     }
                     string mode = to_string(int(polyline.lenth / atof(polyline.mode.c_str())) - 1);
                     points_remain.push_back(temp_to); // 调用之前的函数

@@ -13,7 +13,6 @@ public:
     Point();
     string Str() const;                  // 打印该点的坐标（调试用）
     bool operator<(const Point &) const; // 用于排列坐标（好像没啥用了
-                                         // TODO:
     bool operator>(const Point &) const;
     bool operator==(const Point &) const; // 判断相等
 
